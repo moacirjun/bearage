@@ -126,4 +126,31 @@ class ProductTest extends AbstractControllerTest
 
         $this->client->put('/api/products/' . $productId);
     }
+
+    public function testEditProdut()
+    {
+        $this->loadFixture(new ProductFixtures);
+
+        $newPRoductProperties = [
+            'name' => 'name edited',
+            'code' => 'code edited',
+            'slug' => 'slug edited',
+            'description' => 'description edited',
+        ];
+
+        $response = $this->client->put('/api/products/' . 1, ['json' => $newPRoductProperties]);
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertResponseEquals(null, $response);
+
+        $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $repository = $manager->gerRepository(Product::class);
+
+        $editedProduct = $repository->find(1);
+
+        $this->assertEquals($newPRoductProperties['name'], $editedProduct->getName());
+        $this->assertEquals($newPRoductProperties['slug'], $editedProduct->getSlug());
+        $this->assertEquals($newPRoductProperties['code'], $editedProduct->getCode());
+        $this->assertEquals($newPRoductProperties['description'], $editedProduct->getDescription());
+    }
 }
