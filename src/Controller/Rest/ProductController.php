@@ -66,4 +66,24 @@ class ProductController extends Controller
 
         return View::create(ProductDtoAssembler::writeDto($product), Response::HTTP_OK);
     }
+
+    /**
+     * @Route("/{id}", methods={"DELETE"})
+     */
+    public function delete(Request $request, EntityManagerInterface $manager)
+    {
+        $productId = $request->attributes->get('id');
+        $repository = $manager->getRepository(Product::class);
+
+        $product = $repository->find($productId);
+
+        if (!$product instanceof Product) {
+            throw new EntityNotFoundException(sprintf('Product with id[%s] not found', $productId));
+        }
+
+        $manager->remove($product);
+        $manager->flush();
+
+        return View::create(null, Response::HTTP_NO_CONTENT);
+    }
 }
