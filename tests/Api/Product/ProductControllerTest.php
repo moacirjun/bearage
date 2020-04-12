@@ -144,7 +144,7 @@ class ProductTest extends AbstractControllerTest
         $this->assertResponseEquals(null, $response);
 
         $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $repository = $manager->gerRepository(Product::class);
+        $repository = $manager->getRepository(Product::class);
 
         $editedProduct = $repository->find(1);
 
