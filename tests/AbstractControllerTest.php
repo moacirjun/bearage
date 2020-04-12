@@ -52,8 +52,8 @@ class AbstractControllerTest extends WebTestCase
         (new SchemaTool($this->manager))->dropDatabase();
     }
 
-    protected function assertResponseEquals(array $expectedPayload, Response $response)
+    protected function assertResponseEquals(?array $expectedPayload, Response $response)
     {
-        $this->assertEquals($expectedPayload, json_decode($response->getBody()->getContents(), true));
+        $this->assertEquals($expectedPayload ?? '', json_decode($response->getBody()->getContents(), true));
     }
 }

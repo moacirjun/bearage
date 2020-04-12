@@ -84,4 +84,22 @@ class ProductTest extends AbstractControllerTest
 
         $this->assertEquals($newProductPayload['name'], $newProduct->getName());
     }
+
+    public function testDeleteProduct()
+    {
+        $this->loadFixture(new ProductFixtures);
+
+        $productId = 1;
+        $response = $this->client->delete('/api/products/' . $productId);
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertResponseEquals(null, $response);
+
+        $em = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $repository = $em->getRepository(Product::class);
+
+        $deletedProduct = $repository->find($productId);
+
+        $this->assertEquals(null, $deletedProduct);
+    }
 }
