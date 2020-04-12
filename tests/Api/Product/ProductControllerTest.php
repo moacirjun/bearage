@@ -35,6 +35,22 @@ class ProductTest extends AbstractControllerTest
         ], $response);
     }
 
+    public function testFetchSingleProduct()
+    {
+        $this->loadFixture(new ProductFixtures);
+
+        $productId = 1;
+        $response = $this->client->get('/api/products/' . $productId);
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertResponseEquals([
+            'name' => 'name1',
+            'code' => 'code1',
+            'slug' => 'slug1',
+            'description' => 'description1',
+        ], $response);
+    }
+
     public function testPost()
     {
         $this->loadFixture(new ProductFixtures());
