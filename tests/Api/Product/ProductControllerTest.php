@@ -51,6 +51,18 @@ class ProductTest extends AbstractControllerTest
         ], $response);
     }
 
+    public function testFailFetchSingleProduct()
+    {
+        $this->loadFixture(new ProductFixtures);
+
+        $productId = 5;
+
+        $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
+        $this->expectExceptionMessage(sprintf('Product with id[%s] not found', $productId));
+
+        $this->client->get('/api/products/' . $productId);
+    }
+
     public function testPost()
     {
         $this->loadFixture(new ProductFixtures());
