@@ -30,14 +30,16 @@ class Adjustment extends SyliusAdjustment
     /**
      * @inheritDoc
      *
-     * @ORM\ManyToOne(targetEntity="OrderItem", inversedBy="adjustments", nullable="true")
+     * @ORM\ManyToOne(targetEntity="OrderItem", inversedBy="adjustments")
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $orderItem;
 
     /**
      * @inheritDoc
      *
-     * @ORM\ManyToOne(targetEntity="OrderItemUnit", inversedBy="adjustments", nullable="true")
+     * @ORM\ManyToOne(targetEntity="OrderItemUnit", inversedBy="adjustments")
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $orderItemUnit;
 

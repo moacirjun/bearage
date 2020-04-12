@@ -2,22 +2,11 @@
 
 namespace App\Tests\Api\Product;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use GuzzleHttp\Client;
+use App\Tests\AbstractControllerTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProductTest extends KernelTestCase
+class ProductTest extends AbstractControllerTest
 {
-    /**
-     * @var Client
-     */
-    private $client;
-
-    protected function setUp()
-    {
-        $this->client = new Client(['base_uri' => 'http://bearage.local']);
-    }
-
     public function testList()
     {
         $response = $this->client->get('/api/products');
