@@ -102,4 +102,16 @@ class ProductTest extends AbstractControllerTest
 
         $this->assertEquals(null, $deletedProduct);
     }
+
+    public function testFilDeleteProduct()
+    {
+        $this->loadFixture(new ProductFixtures);
+
+        $productId = 4;
+
+        $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
+        $this->expectExceptionMessage(sprintf('Product with id[%s] not found', $productId));
+
+        $this->client->delete('/api/products/' . $productId);
+    }
 }
