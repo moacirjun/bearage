@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AbstractControllerTest extends WebTestCase
@@ -49,5 +50,10 @@ class AbstractControllerTest extends WebTestCase
     public function tearDown()
     {
         (new SchemaTool($this->manager))->dropDatabase();
+    }
+
+    protected function assertResponseEquals(array $expectedPayload, Response $response)
+    {
+        $this->assertEquals($expectedPayload, json_decode($response->getBody()->getContents(), true));
     }
 }
