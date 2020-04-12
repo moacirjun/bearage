@@ -5,7 +5,9 @@ namespace App\Entity\Product;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Product\Model\Product as BaseProduct;
 use App\Entity\Product\ProductTranslation;
+use App\Resources\Locale;
 use Sylius\Component\Product\Model\ProductTranslationInterface;
+use Sylius\Component\Resource\Model\TranslationInterface;
 
 /**
  * @ORM\Entity
@@ -14,8 +16,8 @@ use Sylius\Component\Product\Model\ProductTranslationInterface;
 class Product extends BaseProduct
 {
     /**
-     * @inheritDoc 
-     * 
+     * @inheritDoc
+     *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -23,27 +25,27 @@ class Product extends BaseProduct
     protected $id;
 
     /**
-     * @inheritDoc 
-     * 
+     * @inheritDoc
+     *
      * @ORM\Column()
      */
     protected $code;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\OneToMany(targetEntity="ProductAttributeValue", mappedBy="subject")
      * @ORM\JoinColumn(name="subject_id")
      */
     protected $attributes;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\OneToMany(targetEntity="ProductVariant", mappedBy="product")
      */
     protected $variants;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\ManyToMany(targetEntity="ProductOption")
      * @ORM\JoinTable(
      *      name="sylius_product_options",
@@ -54,31 +56,31 @@ class Product extends BaseProduct
     protected $options;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\OneToMany(targetEntity="ProductAssociation", mappedBy="owner")
      */
     protected $associations;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\Column(type="datetime", name="created_at")
      */
     protected $createdAt;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\Column(type="boolean")
      */
     protected $enabled = true;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="translatable")
      * @ORM\JoinColumn(name="translatable_id")
      */
@@ -87,5 +89,10 @@ class Product extends BaseProduct
     protected function createTranslation(): ProductTranslationInterface
     {
         return new ProductTranslation();
+    }
+
+    public function getTranslation(?string $locale = null): TranslationInterface
+    {
+        return parent::getTranslation($locale ?? Locale::DEFAULT_LOCALE_CODE);
     }
 }
