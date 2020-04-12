@@ -2,6 +2,7 @@
 
 namespace App\Controller\Rest;
 
+use App\Dto\Product\ProductDto;
 use App\Dto\Product\ProductDtoAssembler;
 use App\Entity\Product\Product;
 use App\Factory\Product\ProductFactory;
@@ -82,6 +83,34 @@ class ProductController extends Controller
         }
 
         $manager->remove($product);
+        $manager->flush();
+
+        return View::create(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/{id}", methods={"PUT"})
+     */
+    public function edit(Request $request, EntityManagerInterface $manager)
+    {
+        $productId = $request->attributes->get('id');
+        $repository = $manager->getRepository(Product::class);
+
+        $product = $repository->find($productId);
+
+        if (!$product instanceof Product) {
+            throw new EntityNotFoundException(sprintf('Product with id[%s] not found', $productId));
+        }
+
+        $dto = new ProductDto(
+            $request->get('code') ?? '',
+            $request->get('name') ?? '',
+            $request->get('slug') ?? '',
+            $request->get('description') ?? ''
+        );
+
+        ProductDtoAssembler::updateProduct($product, $dto);
+        $manager->persist($product);
         $manager->flush();
 
         return View::create(null, Response::HTTP_NO_CONTENT);
