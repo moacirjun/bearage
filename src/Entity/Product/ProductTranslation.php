@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductTranslation extends BaseProductTranslation
 {
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -41,13 +41,13 @@ class ProductTranslation extends BaseProductTranslation
 
     /**
      * @inheritDoc
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     protected $metaKeywords;
 
     /**
      * @inheritDoc
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     protected $metaDescription;
 
@@ -58,7 +58,7 @@ class ProductTranslation extends BaseProductTranslation
     protected $locale;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="translations")
      * @ORM\JoinColumn(name="translatable_id")
      */

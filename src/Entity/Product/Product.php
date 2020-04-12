@@ -69,7 +69,7 @@ class Product extends BaseProduct
 
     /**
      * @inheritDoc
-     * @ORM\Column(type="datetime", name="updated_at")
+     * @ORM\Column(type="datetime", name="updated_at", nullable=true)
      */
     protected $updatedAt;
 
@@ -81,7 +81,7 @@ class Product extends BaseProduct
 
     /**
      * @inheritDoc
-     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="translatable")
+     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="translatable", cascade={"persist"})
      * @ORM\JoinColumn(name="translatable_id")
      */
     protected $translations;
