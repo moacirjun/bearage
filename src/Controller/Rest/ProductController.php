@@ -2,10 +2,14 @@
 
 namespace App\Controller\Rest;
 
+use App\Dto\Product\ProductDto;
 use App\Dto\Product\ProductDtoAssembler;
 use App\Entity\Product\Product;
+use App\Factory\Product\ProductFactory;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -31,8 +35,18 @@ class ProductController extends Controller
     /**
      * @Route("", methods={"POST"})
      */
-    public function create()
+    public function create(Request $request, EntityManagerInterface $manager)
     {
-        return View::create([], Response::HTTP_CREATED);
+        $newProduct = (new ProductFactory)->make(
+            $request->get('code'),
+            $request->get('name'),
+            $request->get('slug'),
+            $request->get('description')
+        );
+
+        $manager->persist($newProduct);
+        $manager->flush();
+
+        return View::create(ProductDtoAssembler::writeDto($newProduct), Response::HTTP_CREATED);
     }
 }

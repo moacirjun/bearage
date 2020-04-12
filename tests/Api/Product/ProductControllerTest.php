@@ -5,6 +5,7 @@ namespace App\Tests\Api\Product;
 use App\Tests\AbstractControllerTest;
 use Symfony\Component\HttpFoundation\Response;
 use App\DataFixtures\ProductFixtures;
+use App\Entity\Product\Product;
 
 class ProductTest extends AbstractControllerTest
 {
@@ -36,13 +37,23 @@ class ProductTest extends AbstractControllerTest
 
     public function testPost()
     {
-        $response = $this->client->post('/api/products', ['json' => [
-            'name' => 'name',
-            'code' => 'code',
-            'slug' => 'slug',
-            'description' => 'description',
-        ]]);
+        $this->loadFixture(new ProductFixtures());
+
+        $newProductPayload = [
+            'name' => 'New Product',
+            'code' => '##123123',
+            'slug' => 'new-product',
+            'description' => 'new product description',
+        ];
+
+        $response = $this->client->post('/api/products', ['json' => $newProductPayload]);
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
+        $this->assertResponseEquals($newProductPayload, $response);
+
+        $em = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $newProduct = $em->getRepository(Product::class)->find(4);
+
+        $this->assertEquals($newProductPayload['name'], $newProduct->getName());
     }
 }
