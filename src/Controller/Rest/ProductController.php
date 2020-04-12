@@ -49,4 +49,14 @@ class ProductController extends Controller
 
         return View::create(ProductDtoAssembler::writeDto($newProduct), Response::HTTP_CREATED);
     }
+
+    /**
+     * @Route("/{id}", methods={"GET"})
+     */
+    public function fetchSingle(Request $request, EntityManagerInterface $manager)
+    {
+        $product = $manager->getRepository(Product::class)->find($request->attributes->get('id'));
+
+        return View::create(ProductDtoAssembler::writeDto($product), Response::HTTP_OK);
+    }
 }
