@@ -2,11 +2,11 @@
 
 namespace App\Controller\Rest;
 
-use App\Dto\Product\ProductDto;
 use App\Dto\Product\ProductDtoAssembler;
 use App\Entity\Product\Product;
 use App\Factory\Product\ProductFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +55,14 @@ class ProductController extends Controller
      */
     public function fetchSingle(Request $request, EntityManagerInterface $manager)
     {
-        $product = $manager->getRepository(Product::class)->find($request->attributes->get('id'));
+        $productId = $request->attributes->get('id');
+        $repository = $manager->getRepository(Product::class);
+
+        $product = $repository->find($productId);
+
+        if (!$product instanceof Product) {
+            throw new EntityNotFoundException(sprintf('Product with id[%s] not found', $productId));
+        }
 
         return View::create(ProductDtoAssembler::writeDto($product), Response::HTTP_OK);
     }
