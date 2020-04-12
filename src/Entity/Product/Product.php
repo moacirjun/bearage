@@ -81,7 +81,13 @@ class Product extends BaseProduct
 
     /**
      * @inheritDoc
-     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="translatable", cascade={"persist"})
+     * @ORM\OneToMany(
+     *      targetEntity="ProductTranslation",
+     *      mappedBy="translatable",
+     *      cascade={"persist"},
+     *      fetch="EAGER",
+     *      indexBy="locale"
+     * )
      * @ORM\JoinColumn(name="translatable_id")
      */
     protected $translations;
