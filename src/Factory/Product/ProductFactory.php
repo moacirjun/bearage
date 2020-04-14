@@ -15,6 +15,7 @@ class ProductFactory
     public function make(
         string $name,
         string $desciption,
+        int $stock,
         float $price,
         ?float $salePrice = null,
         ?float $cost = null
@@ -28,7 +29,12 @@ class ProductFactory
         $product->setDescription($desciption);
 
         $productVariant = new ProductVariant();
+        $productVariant->setOnHand($stock);
         $productVariant->setPrice($price);
+        $productVariant->setCode($product->getCode() . '-1');
+        $productVariant->setPosition(1);
+        $productVariant->setOnHold(0);
+        $productVariant->setTracked(false);
 
         if (null !== $salePrice) {
             $productVariant->setSalePrice($salePrice);
