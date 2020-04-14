@@ -20,18 +20,27 @@ class ProductTest extends AbstractControllerTest
             [
                 'code' => 'code1',
                 'name' => 'name1',
-                'slug' => 'slug1',
                 'description' => 'description1',
+                'stock' => 10,
+                'price' => 13,
+                'salePrice' => 12,
+                'cost' => 10,
             ], [
                 'code' => 'code2',
                 'name' => 'name2',
-                'slug' => 'slug2',
                 'description' => 'description2',
+                'stock' => 20,
+                'price' => 23,
+                'salePrice' => 22,
+                'cost' => 20,
             ], [
                 'code' => 'code3',
                 'name' => 'name3',
-                'slug' => 'slug3',
                 'description' => 'description3',
+                'stock' => 30,
+                'price' => 33,
+                'salePrice' => 32,
+                'cost' => 30,
             ]
         ], $response);
     }

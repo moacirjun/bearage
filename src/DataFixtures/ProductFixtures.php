@@ -12,6 +12,7 @@ class ProductFixtures extends Fixture
     {
         $dataProvider = [
             [
+                'code' => 'code1',
                 'name' => 'name1',
                 'description' => 'description1',
                 'stock' => 10,
@@ -19,6 +20,7 @@ class ProductFixtures extends Fixture
                 'sale_price' => 12,
                 'cost' => 10,
             ], [
+                'code' => 'code2',
                 'name' => 'name2',
                 'description' => 'description2',
                 'stock' => 20,
@@ -26,6 +28,7 @@ class ProductFixtures extends Fixture
                 'sale_price' => 22,
                 'cost' => 20,
             ], [
+                'code' => 'code3',
                 'name' => 'name3',
                 'description' => 'description3',
                 'stock' => 30,
@@ -45,6 +48,7 @@ class ProductFixtures extends Fixture
                 $productArray['price'],
                 $productArray['sale_price'],
                 $productArray['cost'],
+                $productArray['code'],
             );
 
             $manager->persist($product);

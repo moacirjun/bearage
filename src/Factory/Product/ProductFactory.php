@@ -18,10 +18,11 @@ class ProductFactory
         int $stock,
         float $price,
         ?float $salePrice = null,
-        ?float $cost = null
+        ?float $cost = null,
+        ? string $code = null
     ) : ProductInterface {
         $product = new Product();
-        $product->setCode(uniqid("BES", true));
+        $product->setCode($code ?? uniqid("BES", true));
         $product->setCurrentLocale($this->getLocale());
 
         $product->setName($name);

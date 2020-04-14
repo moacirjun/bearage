@@ -45,6 +45,7 @@ class ProductController extends Controller
             (float) $request->get('price'),
             (float) $request->get('sale_price'),
             (float) $request->get('cost'),
+            $request->get('code')
         );
         $newProduct->disable();
 
