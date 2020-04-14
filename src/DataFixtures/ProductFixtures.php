@@ -12,20 +12,26 @@ class ProductFixtures extends Fixture
     {
         $dataProvider = [
             [
-                'code' => 'code1',
                 'name' => 'name1',
-                'slug' => 'slug1',
                 'description' => 'description1',
+                'stock' => 10,
+                'price' => 13,
+                'sale_price' => 12,
+                'cost' => 10,
             ], [
-                'code' => 'code2',
                 'name' => 'name2',
-                'slug' => 'slug2',
                 'description' => 'description2',
+                'stock' => 20,
+                'price' => 23,
+                'sale_price' => 22,
+                'cost' => 20,
             ], [
-                'code' => 'code3',
                 'name' => 'name3',
-                'slug' => 'slug3',
                 'description' => 'description3',
+                'stock' => 30,
+                'price' => 33,
+                'sale_price' => 32,
+                'cost' => 30,
             ]
         ];
 
@@ -33,16 +39,16 @@ class ProductFixtures extends Fixture
 
         foreach ($dataProvider as $productArray) {
             $product = $productFactory->make(
-                $productArray['code'],
                 $productArray['name'],
-                $productArray['slug'],
-                $productArray['description']
+                $productArray['description'],
+                $productArray['stock'],
+                $productArray['price'],
+                $productArray['sale_price'],
+                $productArray['cost'],
             );
 
             $manager->persist($product);
         }
-        // $product = new Product();
-        // $manager->persist($product);
 
         $manager->flush();
     }
