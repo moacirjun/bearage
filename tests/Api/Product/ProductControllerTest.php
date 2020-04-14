@@ -96,7 +96,7 @@ class ProductTest extends AbstractControllerTest
         $this->assertEquals($newProductPayload['cost'], $variant->getCost());
         $this->assertEquals($newProductPayload['price'], $variant->getPrice());
         $this->assertEquals($newProductPayload['sale_price'], $variant->getSalePrice());
-        $this->assertEquals($newProductPayload['enabled'], $newProduct->getEnabled());
+        $this->assertEquals($newProductPayload['enabled'], $newProduct->isEnabled());
     }
 
     public function testDeleteProduct()
