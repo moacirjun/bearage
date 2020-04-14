@@ -15,7 +15,7 @@ use Sylius\Component\Product\Model\ProductVariantTranslationInterface;
 class ProductVariant extends BaseProductVariant implements ProductVariantInterface
 {
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -23,13 +23,13 @@ class ProductVariant extends BaseProductVariant implements ProductVariantInterfa
     protected $id;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\Column()
      */
     protected $code;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="variants")
      */
     protected $product;
@@ -41,39 +41,57 @@ class ProductVariant extends BaseProductVariant implements ProductVariantInterfa
      */
     protected $optionValues;
 
-    /** 
-     * @var int 
+    /**
+     * @var int
      * @ORM\Column(type="integer")
      */
     protected $position;
 
-    /** 
-     * @var int 
+    /**
+     * @var int
      * @ORM\Column(type="integer")
      */
     private $onHold;
 
-    /** 
-     * @var int 
+    /**
+     * @var int
      * @ORM\Column(type="integer")
      */
     private $onHand;
 
-    /** 
-     * @var bool 
+    /**
+     * @var float
+     * @ORM\Column(type="float")
+     */
+    private $cost;
+
+    /**
+     * @var float
+     * @ORM\Column(type="float")
+     */
+    private $price;
+
+    /**
+     * @var float
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $salePrice;
+
+    /**
+     * @var bool
      * @ORM\Column(type="boolean", name="is_tracked")
      */
     private $isTracked;
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      * @ORM\Column(type="datetime", name="created_at")
      */
     protected $createdAt;
 
     /**
-     * @inheritDoc 
-     * @ORM\Column(type="datetime", name="updated_at")
+     * @inheritDoc
+     * @ORM\Column(type="datetime", name="updated_at", nullable=true)
      */
     protected $updatedAt;
 
@@ -126,5 +144,35 @@ class ProductVariant extends BaseProductVariant implements ProductVariantInterfa
     public function setTracked(bool $tracked): void
     {
         $this->isTracked = $tracked;
+    }
+
+    public function setCost(float $cost): void
+    {
+        $this->cost = $cost;
+    }
+
+    public function setPrice(float $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function setSalePrice(float $salePrice): void
+    {
+        $this->salePrice = $salePrice;
+    }
+
+    public function getCost(): ?float
+    {
+        return $this->cost;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function getSalePrice(): ?float
+    {
+        return $this->salePrice;
     }
 }

@@ -40,7 +40,12 @@ class Product extends BaseProduct
 
     /**
      * @inheritDoc
-     * @ORM\OneToMany(targetEntity="ProductVariant", mappedBy="product")
+     * @ORM\OneToMany(
+     *      targetEntity="ProductVariant",
+     *      mappedBy="product",
+     *      fetch="EAGER",
+     *      cascade={"persist", "remove"}
+     * )
      */
     protected $variants;
 
