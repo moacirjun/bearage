@@ -10,10 +10,12 @@ class ProductDtoAssembler
     public static function createProduct(ProductDto $dto) : ProductInterface
     {
         return (new ProductFactory)->make(
-            $dto->getCode() ?? '',
             $dto->getName(),
-            $dto->getSlug(),
-            $dto->getDescription()
+            $dto->getDescription(),
+            $dto->getStock(),
+            $dto->getPrice(),
+            $dto->getSalePrice(),
+            $dto->getCost()
         );
     }
 
@@ -21,17 +23,21 @@ class ProductDtoAssembler
     {
         $product->setCode($dto->getCode());
         $product->setName($dto->getName());
-        $product->setSlug($dto->getSlug());
         $product->setDescription($dto->getDescription());
     }
 
     public static function writeDto(ProductInterface $product) : ProductDto
     {
+        $variant = $product->getVariants()->first();
+
         return new ProductDto(
-            $product->getCode() ?? '',
-            $product->getName() ?? '',
-            $product->getSlug() ?? '',
-            $product->getDescription() ?? ''
+            $product->getCode(),
+            $product->getName(),
+            $product->getDescription(),
+            $variant ? $variant->getOnHand() : null,
+            $variant ? $variant->getPrice() : null,
+            $variant ? $variant->getSalePrice() : null,
+            $variant ? $variant->getCost() : null
         );
     }
 }

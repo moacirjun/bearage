@@ -4,24 +4,30 @@ namespace App\Dto\Product;
 
 class ProductDto
 {
-    /** @var string */
     private $code;
-
-    /** @var string */
     private $name;
-
-    /** @var string */
-    private $slug;
-
-    /** @var string */
     private $description;
+    private $stock;
+    private $price;
+    private $sale_price;
+    private $cost;
 
-    public function __construct(string $code, string $name, string $slug, string $description)
-    {
+    public function __construct(
+        ?string $code,
+        ?string $name,
+        ?string $description,
+        ?int $stock,
+        ?float $price,
+        ?float $sale_price,
+        ?float $cost
+    ) {
         $this->code = $code;
         $this->name = $name;
-        $this->slug = $slug;
         $this->description = $description;
+        $this->stock = $stock;
+        $this->price = $price;
+        $this->sale_price = $sale_price;
+        $this->cost = $cost;
     }
 
     public function getCode(): string
@@ -34,13 +40,28 @@ class ProductDto
         return $this->name;
     }
 
-    public function getSlug(): string
-    {
-        return $this->slug;
-    }
-
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function getStock(): int
+    {
+        return $this->stock;
+    }
+
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    public function getSalePrice(): float
+    {
+        return $this->sale_price;
+    }
+
+    public function getCost(): float
+    {
+        return $this->cost;
     }
 }
