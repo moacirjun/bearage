@@ -6,6 +6,7 @@ use App\Tests\AbstractControllerTest;
 use Symfony\Component\HttpFoundation\Response;
 use App\DataFixtures\ProductFixtures;
 use App\Entity\Product\Product;
+use App\Entity\Product\ProductVariantInterface;
 
 class ProductTest extends AbstractControllerTest
 {
@@ -69,8 +70,11 @@ class ProductTest extends AbstractControllerTest
 
         $newProductPayload = [
             'name' => 'New Product',
-            'code' => '##123123',
-            'slug' => 'new-product',
+            'stock' => 1,
+            'cost' => 18,
+            'price' => 20,
+            'sale_price' => 19,
+            'enabled' => true,
             'description' => 'new product description',
         ];
 
@@ -80,9 +84,19 @@ class ProductTest extends AbstractControllerTest
         $this->assertResponseEquals($newProductPayload, $response);
 
         $em = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+
+        /** @var Product $newProduct */
         $newProduct = $em->getRepository(Product::class)->find(4);
+        /** @var ProductVariantInterface $variant */
+        $variant = $newProduct->getVariants()[0];
 
         $this->assertEquals($newProductPayload['name'], $newProduct->getName());
+        $this->assertEquals($newProductPayload['name'], $newProduct->getDescription());
+        $this->assertEquals($newProductPayload['stock'], $variant->getOnHand());
+        $this->assertEquals($newProductPayload['cost'], $variant->getCost());
+        $this->assertEquals($newProductPayload['price'], $variant->getPrice());
+        $this->assertEquals($newProductPayload['sale_price'], $variant->getSalePrice());
+        $this->assertEquals($newProductPayload['enabled'], $newProduct->getEnabled());
     }
 
     public function testDeleteProduct()
