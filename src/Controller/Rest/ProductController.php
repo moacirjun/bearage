@@ -39,11 +39,18 @@ class ProductController extends Controller
     public function create(Request $request, EntityManagerInterface $manager)
     {
         $newProduct = (new ProductFactory)->make(
-            $request->get('code'),
             $request->get('name'),
-            $request->get('slug'),
-            $request->get('description')
+            $request->get('description'),
+            (int) $request->get('stock'),
+            (float) $request->get('price'),
+            (float) $request->get('sale_price'),
+            (float) $request->get('cost'),
         );
+        $newProduct->disable();
+
+        if (true === $request->get('enabled')) {
+            $newProduct->enable();
+        }
 
         $manager->persist($newProduct);
         $manager->flush();
