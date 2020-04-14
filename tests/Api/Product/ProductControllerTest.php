@@ -56,8 +56,11 @@ class ProductTest extends AbstractControllerTest
         $this->assertResponseEquals([
             'name' => 'name1',
             'code' => 'code1',
-            'slug' => 'slug1',
             'description' => 'description1',
+            'stock' => 10,
+            'price' => 13,
+            'salePrice' => 12,
+            'cost' => 10,
         ], $response);
     }
 
