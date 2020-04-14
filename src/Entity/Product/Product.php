@@ -84,7 +84,7 @@ class Product extends BaseProduct
      * @ORM\OneToMany(
      *      targetEntity="ProductTranslation",
      *      mappedBy="translatable",
-     *      cascade={"persist"},
+     *      cascade={"persist", "remove"},
      *      fetch="EAGER",
      *      indexBy="locale"
      * )
