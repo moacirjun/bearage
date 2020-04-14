@@ -16,12 +16,14 @@ class ProductFactoryTest extends TestCase
         $factory->setlocale(Locale::DEFAULT_LOCALE_CODE);
 
         /** @var Product */
-        $product = $factory->make('code', 'name', 'slug', 'description');
+        $product = $factory->make('name', 'description', 200, 198, 20);
+        $variant = $product->getVariants()->first();
 
         $this->assertInstanceOf(ProductInterface::class, $product);
-        $this->assertEquals('code', $product->getCode());
         $this->assertEquals('name', $product->getName());
-        $this->assertEquals('slug', $product->getSlug());
         $this->assertEquals('description', $product->getDescription());
+        $this->assertEquals(20, $variant->getCost());
+        $this->assertEquals(200, $variant->getPrice());
+        $this->assertEquals(198, $variant->getSalePrice());
     }
 }

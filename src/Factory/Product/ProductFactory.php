@@ -3,30 +3,42 @@
 namespace App\Factory\Product;
 
 use App\Entity\Product\Product;
+use App\Entity\Product\ProductVariant;
 use App\Resources\Locale;
 use Sylius\Component\Product\Model\ProductInterface;
+use Symfony\Component\VarDumper\Caster\UuidCaster;
 
 class ProductFactory
 {
     protected $locale;
 
-    public function make(string $code, string $name = '', string $slug = '', string $desciption = '') : ProductInterface
-    {
+    public function make(
+        string $name,
+        string $desciption,
+        float $price,
+        ?float $salePrice = null,
+        ?float $cost = null
+    ) : ProductInterface {
         $product = new Product();
-        $product->setCode($code);
+        $product->setCode(uniqid("BES", true));
         $product->setCurrentLocale($this->getLocale());
 
-        if ($name !== '') {
-            $product->setName($name);
+        $product->setName($name);
+        $product->setSlug(md5($product->getCode()));
+        $product->setDescription($desciption);
+
+        $productVariant = new ProductVariant();
+        $productVariant->setPrice($price);
+
+        if (null !== $salePrice) {
+            $productVariant->setSalePrice($salePrice);
         }
 
-        if ($desciption !== '') {
-            $product->setDescription($desciption);
+        if (null !== $cost) {
+            $productVariant->setCost($cost);
         }
 
-        if ($slug !== '') {
-            $product->setSlug($slug);
-        }
+        $product->addVariant($productVariant);
 
         return $product;
     }
