@@ -13,13 +13,13 @@ class ProductDto
     private $cost;
 
     public function __construct(
-        ?string $code,
-        ?string $name,
-        ?string $description,
-        ?int $stock,
-        ?float $price,
-        ?float $sale_price,
-        ?float $cost
+        ?string $code = null,
+        ?string $name = null,
+        ?string $description = null,
+        ?int $stock = null,
+        ?float $price = null,
+        ?float $sale_price = null,
+        ?float $cost = null
     ) {
         $this->code = $code;
         $this->name = $name;
@@ -30,37 +30,37 @@ class ProductDto
         $this->cost = $cost;
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function getStock(): int
+    public function getStock(): ?int
     {
         return $this->stock;
     }
 
-    public function getPrice(): float
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function getSalePrice(): float
+    public function getSalePrice(): ?float
     {
         return $this->sale_price;
     }
 
-    public function getCost(): float
+    public function getCost(): ?float
     {
         return $this->cost;
     }
