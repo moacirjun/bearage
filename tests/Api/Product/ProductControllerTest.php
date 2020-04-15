@@ -129,7 +129,7 @@ class ProductTest extends AbstractControllerTest
         $this->assertEquals(null, $deletedProduct);
     }
 
-    public function testFilDeleteProduct()
+    public function testFailDeleteProduct()
     {
         $this->loadFixture(new ProductFixtures);
 
