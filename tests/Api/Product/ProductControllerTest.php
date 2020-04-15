@@ -157,14 +157,12 @@ class ProductTest extends AbstractControllerTest
     {
         $this->loadFixture(new ProductFixtures);
 
-        $newPRoductProperties = [
+        $requestBody = [
             'name' => 'name edited',
-            'code' => 'code edited',
-            'slug' => 'slug edited',
-            'description' => 'description edited',
+            'description' => 'description edited'
         ];
 
-        $response = $this->client->put('/api/products/' . 1, ['json' => $newPRoductProperties]);
+        $response = $this->client->put('/api/products/' . 1, ['json' => $requestBody]);
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         $this->assertResponseEquals(null, $response);
@@ -174,9 +172,8 @@ class ProductTest extends AbstractControllerTest
 
         $editedProduct = $repository->find(1);
 
-        $this->assertEquals($newPRoductProperties['name'], $editedProduct->getName());
-        $this->assertEquals($newPRoductProperties['slug'], $editedProduct->getSlug());
-        $this->assertEquals($newPRoductProperties['code'], $editedProduct->getCode());
-        $this->assertEquals($newPRoductProperties['description'], $editedProduct->getDescription());
+        //Only can change name and description of a product
+        $this->assertEquals($requestBody['name'], $editedProduct->getName());
+        $this->assertEquals($requestBody['description'], $editedProduct->getDescription());
     }
 }

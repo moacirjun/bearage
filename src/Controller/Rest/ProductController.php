@@ -110,14 +110,14 @@ class ProductController extends Controller
             throw new EntityNotFoundException(sprintf('Product with id[%s] not found', $productId));
         }
 
-        $dto = new ProductDto(
-            $request->get('code') ?? '',
-            $request->get('name') ?? '',
-            $request->get('slug') ?? '',
-            $request->get('description') ?? ''
-        );
+        if ($name = $request->get('name')) {
+            $product->setName($name);
+        }
 
-        ProductDtoAssembler::updateProduct($product, $dto);
+        if ($description = $request->get('description')) {
+            $product->setDescription($description);
+        }
+
         $manager->persist($product);
         $manager->flush();
 
