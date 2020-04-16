@@ -54,6 +54,7 @@ class ProductFixtures extends Fixture
             $manager->persist($product);
 
             $this->addReference('product-' . $productArray['name'], $product);
+            $this->addReference('product-variant-' . $productArray['name'], $product->getVariants()->first());
         }
 
         $manager->flush();
