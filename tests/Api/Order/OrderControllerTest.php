@@ -38,7 +38,7 @@ class OrderControllerTest extends AbstractControllerTest
             'grand_total' => 20,
         ];
 
-        $response = $this->client->post('/api/orders', $orderPayload);
+        $response = $this->client->post('/api/orders', ['json' => $orderPayload]);
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         $this->assertResponseEquals(null, $response);
@@ -49,10 +49,10 @@ class OrderControllerTest extends AbstractControllerTest
         /** @var OrderInterface $newOrder */
         $newOrder = $orderRepository->find(4);
 
-        $this->assertEquals($orderPayload['number'], $newOrder->getNumber());
+        $this->assertEquals($orderPayload['number'], $newOrder->getExternalId());
         $this->assertEquals($orderPayload['notes'], $newOrder->getNotes());
         $this->assertEquals($orderPayload['grand_total'], $newOrder->getTotal());
-        $this->assertEquals($orderPayload['order_discount'], $newOrder->getAdjustmentsTotalRecursively('discount'));
-        $this->assertEquals($orderPayload['order_tax'], $$newOrder->getAdjustmentsTotalRecursively('tax'));
+        $this->assertEquals((int) $orderPayload['order_discount'] * -1, $newOrder->getAdjustmentsTotalRecursively('discount'));
+        $this->assertEquals($orderPayload['order_tax'], $newOrder->getAdjustmentsTotalRecursively('tax'));
     }
 }

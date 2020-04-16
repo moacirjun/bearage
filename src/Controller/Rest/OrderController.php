@@ -27,7 +27,8 @@ class OrderController extends Controller
     public function create(Request $request, EntityManagerInterface $em)
     {
         $newOrder = new Order();
-        $newOrder->setNumber($request->get('number'));
+        $newOrder->setExternalId($request->get('number'));
+        $newOrder->setNumber(uniqid("BES", true));
         $newOrder->setNotes($request->get('notes'));
         $newOrder->setCheckoutCompletedAt(new \DateTime());
 
@@ -42,25 +43,18 @@ class OrderController extends Controller
 
             $orderItem = new OrderItem();
 
-            $quatity = $item['quatity'] ?? 1;
-            $quatity = max($quatity, 1);
+            $quantity = $item['quantity'] ?? 1;
+            $quantity = max($quantity, 1);
 
-            for ($count = 0; $count < $quatity; $count++) {
+            for ($count = 0; $count < $quantity; $count++) {
                 $orderItemUnit = new OrderItemUnit($orderItem);
             }
 
             $orderItem->setVariant($productVariant);
-            $orderItem->setUnitPrice($productVariant->getSalePrice());
-
+            $orderItem->setUnitPrice($item['unit']);
 
             $this->addAdjustment($orderItem, $item['discount'], 'discount');
             $this->addAdjustment($orderItem, $item['tax'], 'tax');
-
-            if ($orderItem->getAdjustments()->count() > 0) {
-                $em->persist($orderItem->getAdjustments());
-            }
-
-            $orderItem->recalculateUnitsTotal();
 
             $newOrder->addItem($orderItem);
         }
@@ -70,11 +64,6 @@ class OrderController extends Controller
 
         $newOrder->recalculateAdjustmentsTotal();
         $newOrder->recalculateItemsTotal();
-
-        if ($newOrder->getAdjustments()->count() > 0) {
-            dump($newOrder->getAdjustments());
-            $em->persist($newOrder->getAdjustments());
-        }
 
         $em->persist($newOrder);
         $em->flush();
@@ -88,12 +77,12 @@ class OrderController extends Controller
             return;
         }
 
+        $adjustmentValue = $type === 'discount' ? $discount * -1 : $discount;
+
         $adjustment = new Adjustment();
-        $adjustment->setAmount($discount);
+        $adjustment->setAmount($adjustmentValue);
         $adjustment->setType($type);
 
         $adjustable->addAdjustment($adjustment);
-
-        dump($adjustable, $adjustment);
     }
 }
