@@ -7,22 +7,25 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Order\OrderInterface;
 use App\Entity\Order\Order;
 use App\DataFixtures\OrderFixtures;
+use App\DataFixtures\ProductFixtures;
+use App\Entity\Product\Product;
 
 class OrderControllerTest extends AbstractControllerTest
 {
     public function testCreateOrder()
     {
-        $orderFixtures = new OrderFixtures();
+        $this->loadFixture([new ProductFixtures, new OrderFixtures()]);
 
-        $this->loadFixture($orderFixtures->getDependencies());
-        $this->loadFixture($orderFixtures);
+        $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $product = $manager->getRepository(Product::class)->find(1);
+        $productVariant = $product->getVariants()->first();
 
         $orderPayload = [
-            'number' => '',
-            'notes' => '',
+            'number' => 'BES101010',
+            'notes' => 'nota test',
             'items' => [
                 [
-                    'id' => '',
+                    'id' => $productVariant->getCode(),
                     'quantity' => 2,
                     'discount' => 0,
                     'unit' => 12,
@@ -40,16 +43,16 @@ class OrderControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         $this->assertResponseEquals(null, $response);
 
-        $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $repository = $manager->getRepository(Order::class);
+        $manager->clear();
+        $orderRepository = $manager->getRepository(Order::class);
 
         /** @var OrderInterface $newOrder */
-        $newOrder = $repository->find(4);
+        $newOrder = $orderRepository->find(4);
 
         $this->assertEquals($orderPayload['number'], $newOrder->getNumber());
         $this->assertEquals($orderPayload['notes'], $newOrder->getNotes());
+        $this->assertEquals($orderPayload['grand_total'], $newOrder->getTotal());
         $this->assertEquals($orderPayload['order_discount'], $newOrder->getAdjustmentsTotalRecursively('discount'));
         $this->assertEquals($orderPayload['order_tax'], $$newOrder->getAdjustmentsTotalRecursively('tax'));
-        $this->assertEquals($orderPayload['grand_total'], $newOrder->getTotal());
     }
 }
