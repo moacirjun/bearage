@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="sylius_order")
  */
-class Order extends SyliusOrder
+class Order extends SyliusOrder implements OrderInterface
 {
     /**
      * @inheritDoc
@@ -37,7 +37,7 @@ class Order extends SyliusOrder
     /**
      * @inheritDoc
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $notes;
 
@@ -72,14 +72,26 @@ class Order extends SyliusOrder
     /**
      * @inheritDoc
      *
-     * @ORM\OneToMany(targetEntity="Adjustment", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="App\Entity\Order\Adjustment", mappedBy="order")
      */
     protected $adjustments;
 
     /**
      * @inheritDoc
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Order\OrderItem", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="App\Entity\Order\OrderItem", mappedBy="order", cascade={"persist", "remove"})
      */
     protected $items;
+
+    /**
+     * @inheritDoc
+     * @ORM\Column(type="datetime")
+    */
+    protected $createdAt;
+
+    /**
+     * @inheritDoc
+     * @ORM\Column(type="datetime", nullable=true)
+    */
+    protected $updatedAt;
 }

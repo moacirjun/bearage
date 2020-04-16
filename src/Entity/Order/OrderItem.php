@@ -59,8 +59,7 @@ class OrderItem extends SyliusOrderItem implements OrderItemInterface
 
     /**
      * @inheritDoc
-     *
-     * @ORM\OneToMany(targetEntity="OrderItemUnit", mappedBy="orderItem")
+     *@ORM\OneToMany(targetEntity="OrderItemUnit", mappedBy="orderItem", cascade={"persist", "remove"})
      */
     protected $units;
 
