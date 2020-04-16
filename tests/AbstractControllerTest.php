@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
@@ -41,7 +42,22 @@ class AbstractControllerTest extends WebTestCase
         $fixtures = is_array($fixture) ? $fixture : [$fixture];
 
         foreach ($fixtures as $item) {
-            $loader->addFixture($item);
+            if ($item instanceof FixtureInterface) {
+                $loader->addFixture($item);
+                continue;
+            }
+
+            if (!class_exists($item)) {
+                continue;
+            }
+
+            $fixture = new $item;
+
+            if (!$fixture instanceof FixtureInterface) {
+                continue;
+            }
+
+            $loader->addFixture($fixture);
         }
 
         $this->executor->execute($loader->getFixtures());

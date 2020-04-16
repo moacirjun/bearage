@@ -6,12 +6,16 @@ use App\Tests\AbstractControllerTest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Order\OrderInterface;
 use App\Entity\Order\Order;
+use App\DataFixtures\OrderFixtures;
 
 class OrderControllerTest extends AbstractControllerTest
 {
     public function testCreateOrder()
     {
-        $this->loadFixture(new OrderFixture());
+        $orderFixtures = new OrderFixtures();
+
+        $this->loadFixture($orderFixtures->getDependencies());
+        $this->loadFixture($orderFixtures);
 
         $orderPayload = [
             'number' => '',
