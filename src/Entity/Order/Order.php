@@ -30,6 +30,13 @@ class Order extends SyliusOrder implements OrderInterface
     /**
      * @inheritDoc
      *
+     * @ORM\Column(nullable=true)
+     */
+    protected $externalId;
+
+    /**
+     * @inheritDoc
+     *
      * @ORM\Column(type="datetime", name="checkout_completed_at")
      */
     protected $checkoutCompletedAt;
@@ -72,7 +79,7 @@ class Order extends SyliusOrder implements OrderInterface
     /**
      * @inheritDoc
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Order\Adjustment", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="App\Entity\Order\Adjustment", mappedBy="order", cascade={"persist"})
      */
     protected $adjustments;
 
@@ -94,4 +101,14 @@ class Order extends SyliusOrder implements OrderInterface
      * @ORM\Column(type="datetime", nullable=true)
     */
     protected $updatedAt;
+
+    public function getExternalId(): ?string
+    {
+        return $this->externalId;
+    }
+
+    public function setExternalId($externalId): void
+    {
+        $this->externalId = $externalId;
+    }
 }
