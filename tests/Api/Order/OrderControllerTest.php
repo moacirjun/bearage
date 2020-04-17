@@ -54,5 +54,46 @@ class OrderControllerTest extends AbstractControllerTest
         $this->assertEquals($orderPayload['grand_total'], $newOrder->getTotal());
         $this->assertEquals((int) $orderPayload['order_discount'] * -1, $newOrder->getAdjustmentsTotalRecursively('discount'));
         $this->assertEquals($orderPayload['order_tax'], $newOrder->getAdjustmentsTotalRecursively('tax'));
+
+        return $newOrder;
+    }
+
+    public function testStockExchange()
+    {
+        $this->loadFixture([new ProductFixtures, new OrderFixtures()]);
+
+        $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+
+        $product = $manager->getRepository(Product::class)->find(1);
+        $productVariant = $product->getVariants()->first();
+
+        $stock = $productVariant->getOnHand();
+        $productVariantQuantity = 2;
+
+        $orderPayload = [
+            'number' => 'BES101010',
+            'notes' => 'nota test',
+            'items' => [
+                [
+                    'id' => $productVariant->getCode(),
+                    'quantity' => $productVariantQuantity,
+                    'discount' => 0,
+                    'unit' => 12,
+                    'tax' => 0,
+                    'total' => 24,
+                ]
+            ],
+            'order_discount' => 4,
+            'order_tax' => 0,
+            'grand_total' => 20,
+        ];
+
+        $this->client->post('/api/orders', ['json' => $orderPayload]);
+
+        $manager->clear();
+        $product = $manager->getRepository(Product::class)->find(1);
+        $productVariant = $product->getVariants()->first();
+
+        $this->assertEquals($stock - $productVariantQuantity, $productVariant->getOnHand());
     }
 }
