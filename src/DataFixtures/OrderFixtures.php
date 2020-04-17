@@ -10,6 +10,7 @@ use App\Entity\Order\OrderItemUnit;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sylius\Component\Order\Model\AdjustableInterface;
 use Sylius\Component\Product\Model\ProductVariantInterface;
 
 class OrderFixtures extends Fixture
@@ -56,13 +57,12 @@ class OrderFixtures extends Fixture
             $newOrder->setNotes($orderData['notes']);
             $newOrder->setCheckoutCompletedAt(new DateTime());
 
-            // $this->addDiscount($newOrder, $orderData['discount']);
-            // $this->addTaxes($newOrder, $orderData['tax']);
+            $this->addAdjustment($newOrder, $orderData['discount']);
+            $this->addAdjustment($newOrder, $orderData['tax'], 'tax');
 
             $newOrder->recalculateAdjustmentsTotal();
             $newOrder->recalculateItemsTotal();
 
-            // $em->persist($newOrder->getAdjustments());
             $em->persist($newOrder);
         }
 
@@ -76,25 +76,18 @@ class OrderFixtures extends Fixture
         ];
     }
 
-    private function addDiscount(OrderInterface &$order, $discount)
+    public function addAdjustment(AdjustableInterface &$adjustable, $discount, $type = 'discount')
     {
         if (!$discount) {
             return;
         }
 
+        $adjustmentValue = $type === 'discount' ? $discount * -1 : $discount;
+
         $adjustment = new Adjustment();
-        $adjustment->setAmount($discount);
-        $adjustment->setType('discount');
+        $adjustment->setAmount($adjustmentValue);
+        $adjustment->setType($type);
 
-        $adjustment->setAdjustable($order);
-    }
-
-    private function addTaxes(OrderInterface &$order, $tax)
-    {
-        $adjustment = new Adjustment();
-        $adjustment->setAmount($tax);
-        $adjustment->setType('tax');
-
-        $adjustment->setAdjustable($order);
+        $adjustable->addAdjustment($adjustment);
     }
 }
