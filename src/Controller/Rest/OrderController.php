@@ -50,6 +50,10 @@ class OrderController extends Controller
                 $orderItemUnit = new OrderItemUnit($orderItem);
             }
 
+            //TODO: STOCK MANAGEMENT -> Make a service to manage stock
+            $productVariant->setOnHand($productVariant->getOnHand() - $quantity);
+            $em->persist($productVariant);
+
             $orderItem->setVariant($productVariant);
             $orderItem->setUnitPrice($item['unit']);
 
