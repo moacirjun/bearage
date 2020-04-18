@@ -10,7 +10,7 @@ use Sylius\Component\Product\Model\ProductTranslationInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @ORM\Table(name="sylius_product")
  */
 class Product extends BaseProduct
