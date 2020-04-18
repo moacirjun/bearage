@@ -14,10 +14,18 @@ class PaginatorHelper
     const DEFAULT_PER_PAGE = 50;
     const DEFAULT_PAGE = 1;
 
+    /** @var int */
     private $page;
+
+    /** @var int */
     private $perPage;
+
+    /** @var int */
     private $offset;
+
+    /** @var int */
     private $limit;
+
     private $query;
 
     public function __construct(int $page = self::DEFAULT_PAGE, int $perPage = self::DEFAULT_PER_PAGE)
@@ -27,6 +35,11 @@ class PaginatorHelper
         $this->setOffsetAndLimit();
     }
 
+    /**
+     * @param Request $request
+     * @return self
+     * @thows \InvalidArgumentException
+     */
     public static function createFromRequest(Request $request): self
     {
         $perPage = $request->query->get('perPage') ?? self::DEFAULT_PER_PAGE;
@@ -43,12 +56,20 @@ class PaginatorHelper
         return new self($page, $perPage);
     }
 
-    public function createDoctrinePaginator($query, bool $fetchJoinCollection = true)
+    /**
+     * @param Query|QueryBuilder $query
+     * @param bool $fetchJoinCollection
+     * @return Paginator
+     */
+    public function createDoctrinePaginator($query, bool $fetchJoinCollection = true): Paginator
     {
         $this->setQuery($query);
         return new Paginator($this->query, $fetchJoinCollection);
     }
 
+    /**
+     * @return void
+     */
     protected function setOffsetAndLimit()
     {
         $this->perPage = min($this->perPage, self::MAX_PER_PAGE);
@@ -59,7 +80,7 @@ class PaginatorHelper
     }
 
     /**
-     * @var Query|QueryBuilder
+     * @var Query|QueryBuilder $query
      */
     protected function setQuery($query)
     {
@@ -75,22 +96,34 @@ class PaginatorHelper
         $this->query = $query;
     }
 
+    /**
+     * @return int
+     */
     public function getLimit(): int
     {
         return $this->limit;
     }
 
+    /**
+     * @return int
+     */
     public function getOffset(): int
     {
         return $this->offset;
     }
 
-    public function getPage()
+    /**
+     * @return int
+     */
+    public function getPage(): int
     {
         return $this->page;
     }
 
-    public function getPerPage()
+    /**
+     * @return int
+     */
+    public function getPerPage(): int
     {
         return $this->perPage;
     }
