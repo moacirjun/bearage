@@ -174,4 +174,39 @@ class OrderControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertResponseEquals($responseExpected, $response);
     }
+
+    public function testListSingleOrder()
+    {
+        $this->loadFixture([new ProductFixtures, new OrderFixtures()]);
+
+        $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+
+        $order1 = $manager->getRepository(Order::class)->find(1);
+        $productVariant1 = $manager->getRepository(ProductVariant::class)->find(1);
+
+        $responseExpected = [
+            'id' => 1,
+            'number' => $order1->getNumber(),
+            'state' => Order::STATE_CART,
+            'notes' => 'no notes 1',
+            'items' => [
+                [
+                    'id' => $productVariant1->getCode(),
+                    'quantity' => 1,
+                    'discount' => 0,
+                    'unit' => $productVariant1->getPrice(),
+                    'tax' => 0,
+                    'total' => $productVariant1->getPrice(),
+                ]
+            ],
+            'orderDiscount' => 4,
+            'orderTax' => 0,
+            'grandTotal' => $productVariant1->getPrice() - 4,
+        ];
+
+        $response = $this->client->get('/api/orders/' . 1);
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertResponseEquals($responseExpected, $response);
+    }
 }

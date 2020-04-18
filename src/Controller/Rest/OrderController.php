@@ -10,6 +10,7 @@ use App\Entity\Order\OrderItemUnit;
 use App\Entity\Product\ProductVariant;
 use App\Entity\Product\ProductVariantInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\View\View;
 use Sylius\Component\Order\Model\AdjustableInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
@@ -104,5 +105,24 @@ class OrderController extends Controller
         }
 
         return View::create($ordersDto, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/{id}", methods={"GET"})
+     */
+    public function listSingleOrder(Request $request, EntityManagerInterface $em)
+    {
+        $orderId = $request->attributes->get('id');
+        $repository = $em->getRepository(Order::class);
+
+        $order = $repository->find($orderId);
+
+        if (!$order instanceof Order) {
+            throw new EntityNotFoundException(sprintf('Order with id[%s] not found', $orderId));
+        }
+
+        $orderDto = OrderDtoAssembler::writeDto($order);
+
+        return View::create($orderDto, Response::HTTP_OK);
     }
 }
