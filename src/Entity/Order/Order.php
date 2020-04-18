@@ -6,7 +6,7 @@ use Sylius\Component\Order\Model\Order as SyliusOrder;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  * @ORM\Table(name="sylius_order")
  */
 class Order extends SyliusOrder implements OrderInterface

@@ -9,6 +9,7 @@ use App\Entity\Order\OrderItem;
 use App\Entity\Order\OrderItemUnit;
 use App\Entity\Product\ProductVariant;
 use App\Entity\Product\ProductVariantInterface;
+use App\Resources\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\View\View;
@@ -95,16 +96,26 @@ class OrderController extends Controller
     /**
      * @Route("", methods={"GET"})
      */
-    public function listOrders(EntityManagerInterface $em)
+    public function listOrders(Request $request, EntityManagerInterface $em)
     {
-        $orders = $em->getRepository(Order::class)->findAll();
-        $ordersDto = [];
+        $searchOrderQuery = $em->getRepository(Order::class)->searchAsQueryBuilder();
 
-        foreach ($orders as $order) {
+        $paginatorHelper = PaginatorHelper::createFromRequest($request);
+        $paginator = $paginatorHelper->createDoctrinePaginator($searchOrderQuery);
+
+        $ordersDto = [];
+        foreach ($paginator as $order) {
             $ordersDto[] = OrderDtoAssembler::writeDto($order);
         }
 
-        return View::create($ordersDto, Response::HTTP_OK);
+        $response = [
+            'page' => $paginatorHelper->getPage(),
+            'perPage' => $paginatorHelper->getPerPage(),
+            'total' => count($paginator),
+            'items' => $ordersDto
+        ];
+
+        return View::create($response, Response::HTTP_OK);
     }
 
     /**

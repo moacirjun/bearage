@@ -112,61 +112,66 @@ class OrderControllerTest extends AbstractControllerTest
         $productVariant3 = $manager->getRepository(ProductVariant::class)->find(3);
 
         $responseExpected = [
-            [
-                'id' => 1,
-                'number' => $order1->getNumber(),
-                'state' => Order::STATE_CART,
-                'notes' => 'no notes 1',
-                'items' => [
-                    [
-                        'id' => $productVariant1->getCode(),
-                        'quantity' => 1,
-                        'discount' => 0,
-                        'unit' => $productVariant1->getPrice(),
-                        'tax' => 0,
-                        'total' => $productVariant1->getPrice(),
-                    ]
-                ],
-                'orderDiscount' => 4,
-                'orderTax' => 0,
-                'grandTotal' => $productVariant1->getPrice() - 4,
-            ], [
-                'id' => 2,
-                'number' => $order2->getNumber(),
-                'state' => Order::STATE_CART,
-                'notes' => 'no notes 2',
-                'items' => [
-                    [
-                        'id' => $productVariant2->getCode(),
-                        'quantity' => 1,
-                        'discount' => 0,
-                        'unit' => $productVariant2->getPrice(),
-                        'tax' => 0,
-                        'total' => $productVariant2->getPrice(),
-                    ]
-                ],
-                'orderDiscount' => 12,
-                'orderTax' => 0,
-                'grandTotal' => $productVariant2->getPrice() - 12,
-            ], [
-                'id' => 3,
-                'state' => Order::STATE_CART,
-                'number' => $order3->getNumber(),
-                'notes' => 'no notes 3',
-                'items' => [
-                    [
-                        'id' => $productVariant3->getCode(),
-                        'quantity' => 1,
-                        'discount' => 0,
-                        'unit' => $productVariant3->getPrice(),
-                        'tax' => 0,
-                        'total' => $productVariant3->getPrice(),
-                    ]
-                ],
-                'orderDiscount' => 0,
-                'orderTax' => 12,
-                'grandTotal' => $productVariant3->getPrice() + 12,
-            ]
+            'page' => 1,
+            'perPage' => 50,
+            'total' => 3,
+            'items' => [
+                [
+                    'id' => 1,
+                    'number' => $order1->getNumber(),
+                    'state' => Order::STATE_CART,
+                    'notes' => 'no notes 1',
+                    'items' => [
+                        [
+                            'id' => $productVariant1->getCode(),
+                            'quantity' => 1,
+                            'discount' => 0,
+                            'unit' => $productVariant1->getPrice(),
+                            'tax' => 0,
+                            'total' => $productVariant1->getPrice(),
+                        ]
+                    ],
+                    'orderDiscount' => 4,
+                    'orderTax' => 0,
+                    'grandTotal' => $productVariant1->getPrice() - 4,
+                ], [
+                    'id' => 2,
+                    'number' => $order2->getNumber(),
+                    'state' => Order::STATE_CART,
+                    'notes' => 'no notes 2',
+                    'items' => [
+                        [
+                            'id' => $productVariant2->getCode(),
+                            'quantity' => 1,
+                            'discount' => 0,
+                            'unit' => $productVariant2->getPrice(),
+                            'tax' => 0,
+                            'total' => $productVariant2->getPrice(),
+                        ]
+                    ],
+                    'orderDiscount' => 12,
+                    'orderTax' => 0,
+                    'grandTotal' => $productVariant2->getPrice() - 12,
+                ], [
+                    'id' => 3,
+                    'state' => Order::STATE_CART,
+                    'number' => $order3->getNumber(),
+                    'notes' => 'no notes 3',
+                    'items' => [
+                        [
+                            'id' => $productVariant3->getCode(),
+                            'quantity' => 1,
+                            'discount' => 0,
+                            'unit' => $productVariant3->getPrice(),
+                            'tax' => 0,
+                            'total' => $productVariant3->getPrice(),
+                        ]
+                    ],
+                    'orderDiscount' => 0,
+                    'orderTax' => 12,
+                    'grandTotal' => $productVariant3->getPrice() + 12,
+                ]
+            ],
         ];
 
         $response = $this->client->get('/api/orders');
