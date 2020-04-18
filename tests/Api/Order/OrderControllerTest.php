@@ -127,15 +127,14 @@ class OrderControllerTest extends AbstractControllerTest
                         'total' => $productVariant1->getPrice(),
                     ]
                 ],
-                'order_discount' => 4,
-                'order_tax' => 0,
-                'grand_total' => $productVariant2->getPrice() - 4,
+                'orderDiscount' => 4,
+                'orderTax' => 0,
+                'grandTotal' => $productVariant1->getPrice() - 4,
             ], [
                 'id' => 2,
                 'number' => $order2->getNumber(),
                 'state' => Order::STATE_CART,
                 'notes' => 'no notes 2',
-                'order_discount' => 4,
                 'items' => [
                     [
                         'id' => $productVariant2->getCode(),
@@ -146,9 +145,9 @@ class OrderControllerTest extends AbstractControllerTest
                         'total' => $productVariant2->getPrice(),
                     ]
                 ],
-                'order_discount' => 12,
-                'order_tax' => 0,
-                'grand_total' => $productVariant2->getPrice() - 12,
+                'orderDiscount' => 12,
+                'orderTax' => 0,
+                'grandTotal' => $productVariant2->getPrice() - 12,
             ], [
                 'id' => 3,
                 'state' => Order::STATE_CART,
@@ -164,9 +163,9 @@ class OrderControllerTest extends AbstractControllerTest
                         'total' => $productVariant3->getPrice(),
                     ]
                 ],
-                'order_discount' => 0,
-                'order_tax' => 0,
-                'grand_total' => $productVariant3->getPrice(),
+                'orderDiscount' => 0,
+                'orderTax' => 12,
+                'grandTotal' => $productVariant3->getPrice() + 12,
             ]
         ];
 
