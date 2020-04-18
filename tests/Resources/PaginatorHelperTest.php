@@ -25,8 +25,8 @@ class PaginatorHelperTest extends KernelTestCase
 
         $helper = PaginatorHelper::createFromRequest($request);
 
-        $this->assertEquals(89, $helper->getMaxResults());
-        $this->assertEquals(89, $helper->getFirstResult());
+        $this->assertEquals(89, $helper->getOffset());
+        $this->assertEquals(89, $helper->getLimit());
     }
 
     public function testInvalidArgumentsFromRequest()
@@ -45,8 +45,8 @@ class PaginatorHelperTest extends KernelTestCase
 
         $helper = PaginatorHelper::createFromRequest($request);
 
-        $this->assertEquals(PaginatorHelper::DEFAULT_PER_PAGE, $helper->getMaxResults());
-        $this->assertEquals(0, $helper->getFirstResult());
+        $this->assertEquals(PaginatorHelper::DEFAULT_PER_PAGE, $helper->getLimit());
+        $this->assertEquals(0, $helper->getOffset());
     }
 
     public function testCreateDoctrinePaginator()

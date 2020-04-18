@@ -16,8 +16,8 @@ class PaginatorHelper
 
     private $page;
     private $perPage;
-    private $firstResult;
-    private $maxResults;
+    private $offset;
+    private $limit;
     private $query;
 
     public function __construct(int $page = self::DEFAULT_PAGE, int $perPage = self::DEFAULT_PER_PAGE)
@@ -54,8 +54,8 @@ class PaginatorHelper
         $this->perPage = min($this->perPage, self::MAX_PER_PAGE);
         $this->page = max($this->page, 1);
 
-        $this->firstResult = ($this->page - 1) * $this->perPage;
-        $this->maxResults = $this->perPage;
+        $this->offset = ($this->page - 1) * $this->perPage;
+        $this->limit = $this->perPage;
     }
 
     /**
@@ -69,20 +69,20 @@ class PaginatorHelper
             );
         }
 
-        $query->setMaxResults($this->maxResults);
-        $query->setFirstResult($this->firstResult);
+        $query->setMaxResults($this->limit);
+        $query->setFirstResult($this->offset);
 
         $this->query = $query;
     }
 
-    public function getMaxResults(): int
+    public function getLimit(): int
     {
-        return $this->maxResults;
+        return $this->limit;
     }
 
-    public function getFirstResult(): int
+    public function getOffset(): int
     {
-        return $this->firstResult;
+        return $this->offset;
     }
 
     public function getPage()
