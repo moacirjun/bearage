@@ -209,4 +209,23 @@ class OrderControllerTest extends AbstractControllerTest
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertResponseEquals($responseExpected, $response);
     }
+
+    public function testCancelOrder()
+    {
+        $this->loadFixture([new ProductFixtures, new OrderFixtures()]);
+
+        $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+
+        $order = $manager->getRepository(Order::class)->find(2);
+
+        $response = $this->client->put(sprintf('/api/orders/%s/cancel', $order->getNumber()));
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertResponseEquals(null, $response);
+
+        $manager->clear();
+        $orderCanceled = $manager->getRepository(Order::class)->find(2);
+
+        $this->assertEquals(Order::STATE_CANCELLED, $orderCanceled->getState());
+    }
 }
