@@ -14,35 +14,43 @@ class ProductTest extends AbstractControllerTest
     {
         $this->loadFixture(new ProductFixtures());
 
+        $expectedResponse = [
+            'page' => 1,
+            'perPage' => 50,
+            'total' => 3,
+            'items' => [
+                [
+                    'code' => 'code1',
+                    'name' => 'name1',
+                    'description' => 'description1',
+                    'stock' => 10,
+                    'price' => 13,
+                    'salePrice' => 12,
+                    'cost' => 10,
+                ], [
+                    'code' => 'code2',
+                    'name' => 'name2',
+                    'description' => 'description2',
+                    'stock' => 20,
+                    'price' => 23,
+                    'salePrice' => 22,
+                    'cost' => 20,
+                ], [
+                    'code' => 'code3',
+                    'name' => 'name3',
+                    'description' => 'description3',
+                    'stock' => 30,
+                    'price' => 33,
+                    'salePrice' => 32,
+                    'cost' => 30,
+                ]
+            ],
+        ];
+
         $response = $this->client->get('/api/products');
+
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertResponseEquals([
-            [
-                'code' => 'code1',
-                'name' => 'name1',
-                'description' => 'description1',
-                'stock' => 10,
-                'price' => 13,
-                'salePrice' => 12,
-                'cost' => 10,
-            ], [
-                'code' => 'code2',
-                'name' => 'name2',
-                'description' => 'description2',
-                'stock' => 20,
-                'price' => 23,
-                'salePrice' => 22,
-                'cost' => 20,
-            ], [
-                'code' => 'code3',
-                'name' => 'name3',
-                'description' => 'description3',
-                'stock' => 30,
-                'price' => 33,
-                'salePrice' => 32,
-                'cost' => 30,
-            ]
-        ], $response);
+        $this->assertResponseEquals($expectedResponse, $response);
     }
 
     public function testFetchSingleProduct()
