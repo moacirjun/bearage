@@ -125,4 +125,26 @@ class OrderController extends Controller
 
         return View::create($orderDto, Response::HTTP_OK);
     }
+
+    /**
+     * @Route("/{number}/cancel", methods={"PUT"})
+     */
+    public function cancelOrder(Request $request, EntityManagerInterface $em)
+    {
+        $orderNumber = $request->attributes->get('number');
+        $repository = $em->getRepository(Order::class);
+
+        $order = $repository->findOneBy(['number' => $orderNumber]);
+
+        if (!$order instanceof Order) {
+            throw new EntityNotFoundException(sprintf('Order with number[%s] not found', $orderNumber));
+        }
+
+        $order->setState(Order::STATE_CANCELLED);
+
+        $em->persist($order);
+        $em->flush();
+
+        return View::create(null, Response::HTTP_OK);
+    }
 }
