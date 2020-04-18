@@ -6,6 +6,7 @@ use App\Dto\Product\ProductDto;
 use App\Dto\Product\ProductDtoAssembler;
 use App\Entity\Product\Product;
 use App\Factory\Product\ProductFactory;
+use App\Resources\PaginatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\View\View;
@@ -13,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @Route("/products")
@@ -22,15 +24,29 @@ class ProductController extends Controller
     /**
      * @Route("", methods={"GET"})
      */
-    public function list()
+    public function list(Request $request)
     {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $helper = PaginatorHelper::createFromRequest($request);
 
-        $parserProducts = array_map(function ($item) {
-            return ProductDtoAssembler::writeDto($item);
-        }, $products);
+        $searchProductQuery = $this->getDoctrine()
+            ->getRepository(Product::class)
+            ->searchAsQueryBuilder();
 
-        return View::create($parserProducts);
+        $paginator = $helper->createDoctrinePaginator($searchProductQuery);
+
+        $parserProducts = [];
+        foreach ($paginator->getIterator() as $product) {
+            $parserProducts[] = ProductDtoAssembler::writeDto($product);
+        }
+
+        $result = [
+            'page' => $helper->getPage(),
+            'perPage' => $helper->getPerPage(),
+            'total' => count($paginator),
+            'items' => $parserProducts
+        ];
+
+        return View::create($result);
     }
 
     /**
