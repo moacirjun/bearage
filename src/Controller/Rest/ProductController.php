@@ -60,34 +60,34 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/{id}", methods={"GET"})
+     * @Route("/{code}", methods={"GET"})
      */
     public function fetchSingle(Request $request, EntityManagerInterface $manager)
     {
-        $productId = $request->attributes->get('id');
+        $productId = $request->attributes->get('code');
         $repository = $manager->getRepository(Product::class);
 
-        $product = $repository->find($productId);
+        $product = $repository->findOneBy(['code' => $productId]);
 
         if (!$product instanceof Product) {
-            throw new EntityNotFoundException(sprintf('Product with id[%s] not found', $productId));
+            throw new EntityNotFoundException(sprintf('Product with code[%s] not found', $productId));
         }
 
         return View::create(ProductDtoAssembler::writeDto($product), Response::HTTP_OK);
     }
 
     /**
-     * @Route("/{id}", methods={"DELETE"})
+     * @Route("/{code}", methods={"DELETE"})
      */
     public function delete(Request $request, EntityManagerInterface $manager)
     {
-        $productId = $request->attributes->get('id');
+        $productCode = $request->attributes->get('code');
         $repository = $manager->getRepository(Product::class);
 
-        $product = $repository->find($productId);
+        $product = $repository->findOneBy(['code' => $productCode]);
 
         if (!$product instanceof Product) {
-            throw new EntityNotFoundException(sprintf('Product with id[%s] not found', $productId));
+            throw new EntityNotFoundException(sprintf('Product with code[%s] not found', $productCode));
         }
 
         $manager->remove($product);
@@ -97,17 +97,17 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/{id}", methods={"PUT"})
+     * @Route("/{code}", methods={"PUT"})
      */
     public function edit(Request $request, EntityManagerInterface $manager)
     {
-        $productId = $request->attributes->get('id');
+        $productId = $request->attributes->get('code');
         $repository = $manager->getRepository(Product::class);
 
-        $product = $repository->find($productId);
+        $product = $repository->findOneBy(['code' => $productId]);
 
         if (!$product instanceof Product) {
-            throw new EntityNotFoundException(sprintf('Product with id[%s] not found', $productId));
+            throw new EntityNotFoundException(sprintf('Product with code[%s] not found', $productId));
         }
 
         if ($name = $request->get('name')) {

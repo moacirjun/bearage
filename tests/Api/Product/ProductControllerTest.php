@@ -49,11 +49,7 @@ class ProductTest extends AbstractControllerTest
     {
         $this->loadFixture(new ProductFixtures);
 
-        $productId = 1;
-        $response = $this->client->get('/api/products/' . $productId);
-
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertResponseEquals([
+        $expectedResponse = [
             'name' => 'name1',
             'code' => 'code1',
             'description' => 'description1',
@@ -61,19 +57,24 @@ class ProductTest extends AbstractControllerTest
             'price' => 13,
             'salePrice' => 12,
             'cost' => 10,
-        ], $response);
+        ];
+
+        $response = $this->client->get('/api/products/code1');
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertResponseEquals($expectedResponse, $response);
     }
 
     public function testFailFetchSingleProduct()
     {
         $this->loadFixture(new ProductFixtures);
 
-        $productId = 5;
+        $productCode = 'INVALID-CODE';
 
         $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
-        $this->expectExceptionMessage(sprintf('Product with id[%s] not found', $productId));
+        $this->expectExceptionMessage(sprintf('Product with code[%s] not found', $productCode));
 
-        $this->client->get('/api/products/' . $productId);
+        $this->client->get('/api/products/' . $productCode);
     }
 
     public function testPost()
@@ -115,8 +116,7 @@ class ProductTest extends AbstractControllerTest
     {
         $this->loadFixture(new ProductFixtures);
 
-        $productId = 1;
-        $response = $this->client->delete('/api/products/' . $productId);
+        $response = $this->client->delete('/api/products/code1');
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         $this->assertResponseEquals(null, $response);
@@ -124,7 +124,7 @@ class ProductTest extends AbstractControllerTest
         $em = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
         $repository = $em->getRepository(Product::class);
 
-        $deletedProduct = $repository->find($productId);
+        $deletedProduct = $repository->find(1);
 
         $this->assertEquals(null, $deletedProduct);
     }
@@ -133,22 +133,22 @@ class ProductTest extends AbstractControllerTest
     {
         $this->loadFixture(new ProductFixtures);
 
-        $productId = 4;
+        $productCode = 'INVALID-CODE';
 
         $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
-        $this->expectExceptionMessage(sprintf('Product with id[%s] not found', $productId));
+        $this->expectExceptionMessage(sprintf('Product with code[%s] not found', $productCode));
 
-        $this->client->delete('/api/products/' . $productId);
+        $this->client->delete('/api/products/' . $productCode);
     }
 
     public function testFailEditProduct()
     {
         $this->loadFixture(new ProductFixtures);
 
-        $productId = 4;
+        $productId = 'INVALID-CODE';
 
         $this->expectExceptionCode(Response::HTTP_NOT_FOUND);
-        $this->expectExceptionMessage(sprintf('Product with id[%s] not found', $productId));
+        $this->expectExceptionMessage(sprintf('Product with code[%s] not found', $productId));
 
         $this->client->put('/api/products/' . $productId);
     }
@@ -162,7 +162,7 @@ class ProductTest extends AbstractControllerTest
             'description' => 'description edited'
         ];
 
-        $response = $this->client->put('/api/products/' . 1, ['json' => $requestBody]);
+        $response = $this->client->put('/api/products/code1', ['json' => $requestBody]);
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         $this->assertResponseEquals(null, $response);
@@ -170,7 +170,7 @@ class ProductTest extends AbstractControllerTest
         $manager = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
         $repository = $manager->getRepository(Product::class);
 
-        $editedProduct = $repository->find(1);
+        $editedProduct = $repository->findOneBy(['code' => 'code1']);
 
         //Only can change name and description of a product
         $this->assertEquals($requestBody['name'], $editedProduct->getName());
