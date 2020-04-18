@@ -115,6 +115,7 @@ class OrderControllerTest extends AbstractControllerTest
             [
                 'id' => 1,
                 'number' => $order1->getNumber(),
+                'state' => Order::STATE_CART,
                 'notes' => 'no notes 1',
                 'items' => [
                     [
@@ -126,11 +127,15 @@ class OrderControllerTest extends AbstractControllerTest
                         'total' => $productVariant1->getPrice(),
                     ]
                 ],
-                'state' => Order::STATE_CART,
-                'order_discount' => 4,'state' => Order::STATE_CART,
+                'order_discount' => 4,
+                'order_tax' => 0,
+                'grand_total' => $productVariant2->getPrice() - 4,
+            ], [
                 'id' => 2,
                 'number' => $order2->getNumber(),
+                'state' => Order::STATE_CART,
                 'notes' => 'no notes 2',
+                'order_discount' => 4,
                 'items' => [
                     [
                         'id' => $productVariant2->getCode(),
@@ -141,12 +146,12 @@ class OrderControllerTest extends AbstractControllerTest
                         'total' => $productVariant2->getPrice(),
                     ]
                 ],
-                'state' => Order::STATE_CART,
                 'order_discount' => 12,
                 'order_tax' => 0,
                 'grand_total' => $productVariant2->getPrice() - 12,
             ], [
                 'id' => 3,
+                'state' => Order::STATE_CART,
                 'number' => $order3->getNumber(),
                 'notes' => 'no notes 3',
                 'items' => [
@@ -159,7 +164,6 @@ class OrderControllerTest extends AbstractControllerTest
                         'total' => $productVariant3->getPrice(),
                     ]
                 ],
-                'state' => Order::STATE_CART,
                 'order_discount' => 0,
                 'order_tax' => 0,
                 'grand_total' => $productVariant3->getPrice(),
