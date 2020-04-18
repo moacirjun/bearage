@@ -50,6 +50,7 @@ class OrderFixtures extends Fixture
             $orderItemUnit = new OrderItemUnit($orderItem);
 
             $orderItem->setVariant($productVariants[$key]);
+            $orderItem->setUnitPrice($productVariants[$key]->getPrice());
 
             $newOrder = new Order();
             $newOrder->addItem($orderItem);

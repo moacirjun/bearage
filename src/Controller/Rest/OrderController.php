@@ -2,6 +2,7 @@
 
 namespace App\Controller\Rest;
 
+use App\Dto\Order\OrderDtoAssembler;
 use App\Entity\Order\Adjustment;
 use App\Entity\Order\Order;
 use App\Entity\Order\OrderItem;
@@ -88,5 +89,20 @@ class OrderController extends Controller
         $adjustment->setType($type);
 
         $adjustable->addAdjustment($adjustment);
+    }
+
+    /**
+     * @Route("", methods={"GET"})
+     */
+    public function listOrders(EntityManagerInterface $em)
+    {
+        $orders = $em->getRepository(Order::class)->findAll();
+        $ordersDto = [];
+
+        foreach ($orders as $order) {
+            $ordersDto[] = OrderDtoAssembler::writeDto($order);
+        }
+
+        return View::create($ordersDto, Response::HTTP_OK);
     }
 }
