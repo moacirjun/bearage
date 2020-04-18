@@ -108,17 +108,17 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/{id}", methods={"GET"})
+     * @Route("/{number}", methods={"GET"})
      */
     public function listSingleOrder(Request $request, EntityManagerInterface $em)
     {
-        $orderId = $request->attributes->get('id');
+        $orderNumber = $request->attributes->get('number');
         $repository = $em->getRepository(Order::class);
 
-        $order = $repository->find($orderId);
+        $order = $repository->findOneBy(['number' => $orderNumber]);
 
         if (!$order instanceof Order) {
-            throw new EntityNotFoundException(sprintf('Order with id[%s] not found', $orderId));
+            throw new EntityNotFoundException(sprintf('Order with number[%s] not found', $orderNumber));
         }
 
         $orderDto = OrderDtoAssembler::writeDto($order);

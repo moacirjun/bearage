@@ -204,7 +204,7 @@ class OrderControllerTest extends AbstractControllerTest
             'grandTotal' => $productVariant1->getPrice() - 4,
         ];
 
-        $response = $this->client->get('/api/orders/' . 1);
+        $response = $this->client->get('/api/orders/' . $order1->getNumber());
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertResponseEquals($responseExpected, $response);
