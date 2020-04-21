@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\DataFixtures\UserFixtures;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\Loader;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\TestContainer;
 
 class AbstractControllerTest extends WebTestCase
 {
@@ -23,17 +25,22 @@ class AbstractControllerTest extends WebTestCase
     /** @var Client $client */
     protected $client;
 
+    /** @var TestContainer $testContainer */
+    protected $testContainer;
+
     public function setUp()
     {
-        $this->client = new Client(['base_uri' => 'http://bearage.local']);
+        /** @var TestContainer $testContainer */
+        $this->testContainer = self::bootKernel()->getContainer()->get('test.service_container');
 
-        // Configure variables
-        $this->manager = self::bootKernel()->getContainer()->get('doctrine.orm.entity_manager');
+        $this->manager = $this->testContainer->get('doctrine.orm.entity_manager');
         $this->executor = new ORMExecutor($this->manager, new ORMPurger());
 
         // Run the schema update tool using our entity metadata
         $schemaTool = new SchemaTool($this->manager);
         $schemaTool->updateSchema($this->manager->getMetadataFactory()->getAllMetadata());
+
+        $this->client = $this->createClientWithAuthorizationHeader();
     }
 
     protected function loadFixture($fixture)
@@ -60,12 +67,38 @@ class AbstractControllerTest extends WebTestCase
             $loader->addFixture($fixture);
         }
 
-        $this->executor->execute($loader->getFixtures());
+        $this->executor->execute($loader->getFixtures(), true);
     }
 
     public function tearDown()
     {
         (new SchemaTool($this->manager))->dropDatabase();
+    }
+
+    public function createClientWithAuthorizationHeader()
+    {
+        $userFixture = $this->testContainer->get('App\DataFixtures\UserFixtures');
+        $this->loadFixture($userFixture);
+
+        $payload = [
+            'username' => 'email.admin@bearage.com.br',
+            'password' => 'bearageadmin',
+        ];
+
+        $client = new Client(['base_uri' => 'http://bearage.local']);
+        $response = $client->post('/api/login_check', ['json' => $payload]);
+
+        $body = json_decode($response->getBody()->getContents(), true);
+        $token = $body['token'];
+
+        $clientConfig = [
+            'base_uri' => 'http://bearage.local',
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+            ]
+        ];
+
+        return new Client($clientConfig);
     }
 
     protected function assertResponseEquals(?array $expectedPayload, Response $response)

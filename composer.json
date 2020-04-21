@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "friendsofsymfony/rest-bundle": "^2.7",
         "guzzlehttp/guzzle": "^6.5",
+        "lexik/jwt-authentication-bundle": "^2.6",
         "sylius/inventory": "1.7",
         "sylius/order": "1.7",
         "sylius/product": "1.7",
