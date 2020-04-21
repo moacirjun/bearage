@@ -40,7 +40,7 @@ class User implements UserInterface
 
     public function __construct(string $username, string $email)
     {
-        $this->isActive = false;
+        $this->enabled = false;
         $this->username = $username;
         $this->email = $email;
     }
