@@ -12,7 +12,16 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Products from './components/Products';
 import loadAxiosDefaultConfig from './config/axios';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 loadAxiosDefaultConfig();
 
-ReactDOM.render(<Router><Products /></Router>, document.getElementById('root'));
+ReactDOM.render(
+    <React.Fragment>
+        <CssBaseline />
+        <Router>
+            <Products />
+        </Router>
+    </React.Fragment>,
+    document.getElementById('root')
+);
