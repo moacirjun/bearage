@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Products extends Component
 {
@@ -19,7 +20,7 @@ class Products extends Component
     fetchProducts() {
         this.setState({products: {...this.state.products, isFetcing: true}});
 
-        console.axios.get('api/products')
+        axios.get('api/products')
             .then(response => {
                 this.setState({products: {...this.state.products, isFetcing: false}});
 
