@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Nav from './Nav';
 import Orders from './Orders';
 import Products from './Products';
+import AddProducts from './AddProduct';
 
 const Home = () => (
     <React.Fragment>
@@ -12,6 +13,7 @@ const Home = () => (
             <Route path="/" exact><h2>Home</h2></Route>
             <Route path="/products"><Products /></Route>
             <Route path="/orders"><Orders /></Route>
+            <Route path="/products-create"><AddProducts /></Route>
         </Switch>
     </React.Fragment>
 );

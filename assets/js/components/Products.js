@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class Products extends Component
 {
@@ -41,6 +42,9 @@ class Products extends Component
         return (
             <div>
                 <h1>Produtos</h1>
+
+                <Link to="/products-create">Criar Novo</Link>
+
                 {isFetcing ? <h3>Loading...</h3> : items.map(product => (
                     <div key={product.code}>
                         <h3>{product.name}</h3>
