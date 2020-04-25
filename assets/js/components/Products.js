@@ -52,7 +52,7 @@ class Products extends Component
                             <li>Code: {product.code}</li>
                             <li>Estoque: {product.stock}</li>
                             <li>Preço: {product.price}</li>
-                            <li>Preço de Venda: {product.saleProce}</li>
+                            <li>Preço de Venda: {product.salePrice}</li>
                             <li>Custo: {product.cost}</li>
                         </ul>
                     </div>
