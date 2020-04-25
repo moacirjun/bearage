@@ -9,7 +9,7 @@
 import '../css/app.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import Home from './components/Home';
 import loadAxiosDefaultConfig from './config/axios';
 import CssBaseline from '@material-ui/core/CssBaseline';
