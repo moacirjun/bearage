@@ -1,5 +1,6 @@
 import React from 'react';
 import ProductSearch from './ProductSearch';
+import ProductList from './ProductList';
 
 class Home extends React.Component
 {
@@ -50,6 +51,10 @@ class Home extends React.Component
                     onSearchTextChange={this.onSearchTextChange}
                     setItems={this.setItems}
                     searchText={this.state.search}
+                />
+                <ProductList
+                    isFetching={this.state.products.isFetching}
+                    products={this.state.products.items}
                 />
             </React.Fragment>
         );
