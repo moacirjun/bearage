@@ -4,13 +4,14 @@ import Nav from './Nav';
 import Orders from './Orders';
 import Products from './Products';
 import AddProducts from './AddProduct';
+import Home from './Home';
 
-const Home = () => (
+const Main = () => (
     <React.Fragment>
         <Nav />
         <h1>Bearage</h1>
         <Switch>
-            <Route path="/" exact><h2>Home</h2></Route>
+            <Route path="/" exact><Home /></Route>
             <Route path="/products"><Products /></Route>
             <Route path="/orders"><Orders /></Route>
             <Route path="/products-create"><AddProducts /></Route>
@@ -18,4 +19,4 @@ const Home = () => (
     </React.Fragment>
 );
 
-export default Home;
+export default Main;
