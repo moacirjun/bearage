@@ -10,7 +10,7 @@ import '../css/app.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router } from 'react-router-dom';
-import Home from './components/Home';
+import Main from './components/Main';
 import loadAxiosDefaultConfig from './config/axios';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -20,7 +20,7 @@ ReactDOM.render(
     <React.Fragment>
         <CssBaseline />
         <Router>
-            <Home />
+            <Main />
         </Router>
     </React.Fragment>,
     document.getElementById('root')
