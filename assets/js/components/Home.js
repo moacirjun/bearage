@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductSearch from './ProductSearch';
 import ProductList from './ProductList';
+import Cart from './Cart';
 
 class Home extends React.Component
 {
@@ -54,13 +55,19 @@ class Home extends React.Component
     }
 
     addProductToOrder(product) {
-        const orderItem = {
-            code: product.code,
-            quatity: 1,
-            price: product.salePrice,
-        };
+        let items = this.state.order.items.concat();
 
-        const items = this.state.order.items.concat(orderItem);
+        const itemIndexOnCart = items.findIndex(item => (item.code === product.code));
+
+        if (itemIndexOnCart === -1) {
+            items.push({
+                code: product.code,
+                quatity: 1,
+                price: product.salePrice,
+            });
+        } else {
+            items[itemIndexOnCart].quatity += 1;
+        }
 
         this.setState((state) => ({
             order: {
@@ -74,7 +81,7 @@ class Home extends React.Component
         const {items, discount, tax} = this.state.order;
 
         const totalItems = items.reduce((previous, current) => {
-            return previous + current.price;
+            return previous + (current.price * current.quatity);
         }, 0);
 
         const total = totalItems + tax - discount;
@@ -92,13 +99,13 @@ class Home extends React.Component
             <React.Fragment>
                 <h2>Home</h2>
                 <h3>Detalhes da venda</h3>
-                <div>
-                    <label>Desconto: <input type="number" value={this.state.order.discount}/></label><br/>
-                    <label>Taxas: <input type="number" value={this.state.order.tax}/></label><br/>
-                    <label>Notas: <input type="text" value={this.state.order.notes}/></label><br/>
-                    <label>Total: {this.state.order.total}</label><br/>
-                    {this.state.order.items.length === 0 || <button onClick={this.saleButtomHandler}>Vender</button>}
-                </div>
+                <Cart
+                    items={this.state.order.items}
+                    discount={this.state.order.discount}
+                    tax={this.state.order.tax}
+                    total={this.state.order.total}
+                    notes={this.state.order.notes}
+                />
                 <hr/>
                 <h3>Pesquisar</h3>
                 <ProductSearch
