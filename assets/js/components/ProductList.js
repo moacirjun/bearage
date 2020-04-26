@@ -6,7 +6,12 @@ const ProductList = (props) => {
             ? <h4>Procurando...</h4>
             : <ul>
                 {props.products.map(item => (
-                    <li>{item.name} [R$ {item.salePrice}]</li>
+                    <li
+                        onClick={() => (props.onProductClick(item))}
+                        key={item.code}
+                    >
+                        {item.name} [R$ {item.salePrice}]
+                    </li>
                 ))}
             </ul>
     );
