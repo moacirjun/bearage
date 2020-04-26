@@ -30,7 +30,8 @@ class Cart extends React.Component
 
         axios.post('/api/orders', payload)
             .then(response => {
-                if (response.status === 201) {
+                if (response.status === 204) {
+                    this.props.onCheckoutCompleted();
                     return alert('Pedido criado com sucesso!');
                 }
 
@@ -65,6 +66,7 @@ Cart.defaultProps = {
     tax: 0,
     total: 0,
     notes: '',
+    onCheckoutCompleted: () => {},
 };
 
 export default Cart;

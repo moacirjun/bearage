@@ -14,13 +14,7 @@ class Home extends React.Component
                 isFetching: false,
                 items: [],
             },
-            order: {
-                items: [],
-                discount: 0,
-                tax: 0,
-                notes: '',
-                total: 0,
-            }
+            order: this.getBlankOrder()
         };
 
         this.setIsFetching = this.setIsFetching.bind(this);
@@ -29,6 +23,7 @@ class Home extends React.Component
         this.onProductClick = this.onProductClick.bind(this);
         this.addProductToOrder = this.addProductToOrder.bind(this);
         this.recalculateOrderTotal = this.recalculateOrderTotal.bind(this);
+        this.clearCart = this.clearCart.bind(this);
     }
 
     setIsFetching(fetcing) {
@@ -61,7 +56,7 @@ class Home extends React.Component
 
         if (itemIndexOnCart === -1) {
             items.push({
-                code: product.code,
+                code: product.code + '-1', //Transform product code to productVariant code
                 quatity: 1,
                 price: product.salePrice,
             });
@@ -94,6 +89,22 @@ class Home extends React.Component
         }));
     }
 
+    clearCart() {
+        this.setState({
+            order: this.getBlankOrder(),
+        });
+    }
+
+    getBlankOrder() {
+        return {
+            items: [],
+            discount: 0,
+            tax: 0,
+            notes: '',
+            total: 0,
+        };
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -105,6 +116,7 @@ class Home extends React.Component
                     tax={this.state.order.tax}
                     total={this.state.order.total}
                     notes={this.state.order.notes}
+                    onCheckoutCompleted={this.clearCart}
                 />
                 <hr/>
                 <h3>Pesquisar</h3>
