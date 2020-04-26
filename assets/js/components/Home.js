@@ -192,6 +192,7 @@ class Home extends React.Component
                     onCartDetailsChange={this.updateCartDetails}
                     onItemQuantityChange={this.changeOrderItemQuantity}
                     onItemRemoved={this.removeOrderItem}
+                    onClearCart={this.clearCart}
                 />
                 <hr/>
                 <h3>Pesquisar</h3>

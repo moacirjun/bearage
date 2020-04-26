@@ -103,6 +103,7 @@ class Cart extends React.Component
                     <label>
                         <button onClick={this.saleButtonHandler}>Vender</button>
                         <button onClick={this.showCartDetails}>Ver Carrinho</button>
+                        <button onClick={this.props.onClearCart}>Cancelar Venda</button>
                     </label>
                 }
             </div>
