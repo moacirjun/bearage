@@ -30,10 +30,6 @@ class Home extends React.Component
         this.recalculateOrderTotal = this.recalculateOrderTotal.bind(this);
     }
 
-    componentDidMount() {
-        this.setState(state => ({search: 'a'}));
-    }
-
     setIsFetching(fetcing) {
         this.setState(state => ({
             products: {...state.products, isFetching: fetcing}

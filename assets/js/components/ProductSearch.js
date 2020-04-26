@@ -8,6 +8,15 @@ class ProductSearch extends React.Component
 
         this.onChangeHandle = this.onChangeHandle.bind(this);
         this.fetchProducts = this.fetchProducts.bind(this);
+        this.fetchPrincipalProducts = this.fetchPrincipalProducts.bind(this);
+    }
+
+    componentDidMount() {
+        this.fetchPrincipalProducts();
+    }
+
+    fetchPrincipalProducts() {
+        this.fetchProducts('');
     }
 
     onChangeHandle(event) {
