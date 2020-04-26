@@ -24,6 +24,7 @@ class Home extends React.Component
         this.addProductToOrder = this.addProductToOrder.bind(this);
         this.recalculateOrderTotal = this.recalculateOrderTotal.bind(this);
         this.clearCart = this.clearCart.bind(this);
+        this.updateCartDetails = this.updateCartDetails.bind(this);
     }
 
     setIsFetching(fetcing) {
@@ -79,7 +80,12 @@ class Home extends React.Component
             return previous + (current.price * current.quatity);
         }, 0);
 
-        const total = totalItems + tax - discount;
+        const intDiscount = discount ? parseInt(discount) : 0,
+            intTax = tax ? parseInt(tax) : 0;
+
+        const total = totalItems + intTax - intDiscount;
+
+        console.log(items, totalItems, tax, discount);
 
         this.setState((state) => ({
             order: {
@@ -105,6 +111,15 @@ class Home extends React.Component
         };
     }
 
+    updateCartDetails(name, value) {
+        this.setState(state => ({
+            order: {
+                ...state.order,
+                [name]: value
+            }
+        }), () => this.recalculateOrderTotal());
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -117,6 +132,7 @@ class Home extends React.Component
                     total={this.state.order.total}
                     notes={this.state.order.notes}
                     onCheckoutCompleted={this.clearCart}
+                    onCartDetailsChange={this.updateCartDetails}
                 />
                 <hr/>
                 <h3>Pesquisar</h3>

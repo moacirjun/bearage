@@ -6,6 +6,10 @@ class Cart extends React.Component
     constructor(props) {
         super(props);
 
+        this.state = {
+            showCart: false,
+        };
+
         this.saleButtonHandler = this.saleButtonHandler.bind(this);
         this.showCartDetails = this.showCartDetails.bind(this);
     }
@@ -23,8 +27,8 @@ class Cart extends React.Component
         const payload = {
             items,
             notes: this.props.notes,
-            order_discount: 0,
-            order_tax: 0,
+            order_discount: this.props.discount,
+            order_tax: this.props.tax,
             grand_total: this.props.total,
         };
 
@@ -41,18 +45,43 @@ class Cart extends React.Component
     }
 
     showCartDetails() {
-
+        this.setState({showCart: !this.state.showCart});
     }
 
     render() {
         return (
             <div>
+                {this.state.showCart &&
+                    <div>
+                        <label>Desconto: </label>
+                        <input
+                            name="discount"
+                            type="number"
+                            value={this.props.discount}
+                            onChange={(event) => this.props.onCartDetailsChange(event.target.name, event.target.value)}
+                        /><br/>
+                        <label>Taxas: </label>
+                        <input
+                            name="tax"
+                            type="number"
+                            value={this.props.tax}
+                            onChange={(event) => this.props.onCartDetailsChange(event.target.name, event.target.value)}
+                        /><br/>
+                        <label>Observação: </label>
+                        <input
+                            name="notes"
+                            type="text"
+                            value={this.props.notes}
+                            onChange={(event) => this.props.onCartDetailsChange(event.target.name, event.target.value)}
+                        />
+                    </div>
+                }
                 <label>Total: {this.props.total}</label>
                 {
                     this.props.items.length === 0 ||
                     <label>
                         <button onClick={this.saleButtonHandler}>Vender</button>
-                        <button onClick={this.showCart}>Ver Carrinho</button>
+                        <button onClick={this.showCartDetails}>Ver Carrinho</button>
                     </label>
                 }
             </div>
@@ -67,6 +96,7 @@ Cart.defaultProps = {
     total: 0,
     notes: '',
     onCheckoutCompleted: () => {},
+    onCartDetailsChange: (name, value) => {},
 };
 
 export default Cart;
