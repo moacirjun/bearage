@@ -14,6 +14,12 @@ class Cart extends React.Component
         this.showCartDetails = this.showCartDetails.bind(this);
     }
 
+    componentDidUpdate() {
+        if (this.props.items.length === 0 && this.state.showCart === true) {
+            this.setState({showCart: false});
+        }
+    }
+
     saleButtonHandler() {
         const items = this.props.items.map(item => ({
             id: item.code,
@@ -73,7 +79,22 @@ class Cart extends React.Component
                             type="text"
                             value={this.props.notes}
                             onChange={(event) => this.props.onCartDetailsChange(event.target.name, event.target.value)}
-                        />
+                        /><br/>
+                        <label>Items: </label>
+                        <ul>
+                            {this.props.items.map(item => (
+                                <li key={item.code}>
+                                    {item.name}
+                                    {' - '}
+                                    <input
+                                        type="number"
+                                        onChange={(event) => this.props.onItemQuantityChange(item, event.target.value)}
+                                        value={item.quantity}
+                                    />
+                                    <button type="button" onClick={() => this.props.onItemRemoved(item)}>Remover</button>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 }
                 <label>Total: {this.props.total}</label>
@@ -97,6 +118,7 @@ Cart.defaultProps = {
     notes: '',
     onCheckoutCompleted: () => {},
     onCartDetailsChange: (name, value) => {},
+    // onItemQuantityChange: (item) => {},
 };
 
 export default Cart;

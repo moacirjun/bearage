@@ -25,6 +25,22 @@ class Home extends React.Component
         this.recalculateOrderTotal = this.recalculateOrderTotal.bind(this);
         this.clearCart = this.clearCart.bind(this);
         this.updateCartDetails = this.updateCartDetails.bind(this);
+        this.changeOrderItemQuantity = this.changeOrderItemQuantity.bind(this);
+        this.removeOrderItem = this.removeOrderItem.bind(this);
+    }
+
+    componentDidUpdate() {
+        if (
+            this.state.order.items.length === 0 &&
+            (
+                this.state.order.discount !== 0
+                || this.state.order.tax !== 0
+                || this.state.order.total !== 0
+                || this.state.order.notes !== ''
+            )
+        ) {
+            this.setState({order: this.getBlankOrder()});
+        }
     }
 
     setIsFetching(fetcing) {
@@ -57,12 +73,13 @@ class Home extends React.Component
 
         if (itemIndexOnCart === -1) {
             items.push({
-                code: product.code + '-1', //Transform product code to productVariant code
-                quatity: 1,
+                name: product.name,
+                code: product.code,
+                quantity: 1,
                 price: product.salePrice,
             });
         } else {
-            items[itemIndexOnCart].quatity += 1;
+            items[itemIndexOnCart].quantity += 1;
         }
 
         this.setState((state) => ({
@@ -77,15 +94,13 @@ class Home extends React.Component
         const {items, discount, tax} = this.state.order;
 
         const totalItems = items.reduce((previous, current) => {
-            return previous + (current.price * current.quatity);
+            return previous + (current.price * current.quantity);
         }, 0);
 
         const intDiscount = discount ? parseInt(discount) : 0,
             intTax = tax ? parseInt(tax) : 0;
 
         const total = totalItems + intTax - intDiscount;
-
-        console.log(items, totalItems, tax, discount);
 
         this.setState((state) => ({
             order: {
@@ -120,6 +135,48 @@ class Home extends React.Component
         }), () => this.recalculateOrderTotal());
     }
 
+    changeOrderItemQuantity(item, quantity) {
+        const {code} = item;
+
+        const orderItems = this.state.order.items.concat();
+        const IndexOnOrder = orderItems.findIndex(orderItem => {
+            return orderItem.code === code;
+        });
+
+        if (IndexOnOrder === -1) {
+            return;
+        }
+
+        orderItems[IndexOnOrder].quantity = quantity;
+
+        this.setState(state => ({
+            order: {
+                ...state.order,
+                items: orderItems
+            }
+        }), () => this.recalculateOrderTotal());
+    }
+
+    removeOrderItem({ code }) {
+        let orderItems = this.state.order.items.concat();
+
+        const indexOnOrder = orderItems.findIndex(orderItem => {
+            return orderItem.code === code;
+        });
+
+        if (indexOnOrder === -1) {
+            return;
+        }
+
+        orderItems.splice(indexOnOrder, 1);
+
+        this.setState(state => ({
+            order: {
+                ...state.order,
+                items: orderItems
+            }
+        }), () => this.recalculateOrderTotal());
+    }
     render() {
         return (
             <React.Fragment>
@@ -133,6 +190,8 @@ class Home extends React.Component
                     notes={this.state.order.notes}
                     onCheckoutCompleted={this.clearCart}
                     onCartDetailsChange={this.updateCartDetails}
+                    onItemQuantityChange={this.changeOrderItemQuantity}
+                    onItemRemoved={this.removeOrderItem}
                 />
                 <hr/>
                 <h3>Pesquisar</h3>
