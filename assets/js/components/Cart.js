@@ -21,7 +21,13 @@ class Cart extends React.Component
     }
 
     saleButtonHandler() {
-        const items = this.props.items.map(item => ({
+        const cartItems = this.props.items;
+
+        if (cartItems.length === 0) {
+            return alert('Nenhum produto adicionado!');
+        }
+
+        const items = cartItems.map(item => ({
             id: item.code,
             quantity: item.quatity,
             discount: 0,
@@ -98,10 +104,10 @@ class Cart extends React.Component
                     </div>
                 }
                 <label>Total: {this.props.total}</label>
+                <button onClick={this.saleButtonHandler}>Vender</button>
                 {
                     this.props.items.length === 0 ||
                     <label>
-                        <button onClick={this.saleButtonHandler}>Vender</button>
                         <button onClick={this.showCartDetails}>Ver Carrinho</button>
                         <button onClick={this.props.onClearCart}>Cancelar Venda</button>
                     </label>
