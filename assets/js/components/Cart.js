@@ -8,15 +8,22 @@ class Cart extends React.Component
 
         this.state = {
             showCart: false,
+            totalItemsCount: 0,
         };
 
         this.saleButtonHandler = this.saleButtonHandler.bind(this);
         this.showCartDetails = this.showCartDetails.bind(this);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         if (this.props.items.length === 0 && this.state.showCart === true) {
             this.setState({showCart: false});
+        }
+
+        const totalItems = this.props.items.reduce((previous, current) => previous + current.quantity, 0);
+
+        if (this.state.totalItemsCount !== totalItems) {
+            this.setState({totalItemsCount: totalItems});
         }
     }
 
@@ -79,7 +86,7 @@ class Cart extends React.Component
                             value={this.props.tax}
                             onChange={(event) => this.props.onCartDetailsChange(event.target.name, event.target.value)}
                         /><br/>
-                        <label>Observação: </label>
+                        <label>Observaçãpreviouso: </label>
                         <input
                             name="notes"
                             type="text"
@@ -103,6 +110,7 @@ class Cart extends React.Component
                         </ul>
                     </div>
                 }
+                <label>Produtos: {this.state.totalItemsCount}</label>
                 <label>Total: {this.props.total}</label>
                 <button onClick={this.saleButtonHandler}>Vender</button>
                 {
