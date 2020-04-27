@@ -9,7 +9,6 @@ import Home from './Home';
 const Main = () => (
     <React.Fragment>
         <Nav />
-        <h1>Bearage</h1>
         <Switch>
             <Route path="/" exact><Home /></Route>
             <Route path="/products"><Products /></Route>
