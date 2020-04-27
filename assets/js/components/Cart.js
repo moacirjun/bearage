@@ -125,7 +125,6 @@ Cart.defaultProps = {
     notes: '',
     onCheckoutCompleted: () => {},
     onCartDetailsChange: (name, value) => {},
-    // onItemQuantityChange: (item) => {},
 };
 
 export default Cart;
