@@ -1,6 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import * as Material from '@material-ui/core';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
 const Nav = () => {
@@ -34,41 +41,41 @@ const Nav = () => {
 
     const list = () => (
         <nav onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
-            <Material.List>
+            <List>
                 {pages.map(page => (
-                    <Material.ListItem button key={page.text} component={Link} to={page.path} exact={page.exact}>
-                        <Material.ListItemText primary={page.text}/>
-                    </Material.ListItem>
+                    <ListItem button key={page.text} component={Link} to={page.path} exact={page.exact}>
+                        <ListItemText primary={page.text}/>
+                    </ListItem>
                 ))}
-            </Material.List>
+            </List>
         </nav>
     );
 
     return (
         <header>
-            <Material.AppBar position="static">
-                <Material.Toolbar>
-                    <Material.IconButton
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
                         edge="start"
                         color="inherit"
                         aria-label="menu"
                         onClick={toggleDrawer(true)}
                     >
                         <MenuIcon />
-                    </Material.IconButton>
-                    <Material.Typography variant="h6">
+                    </IconButton>
+                    <Typography variant="h6">
                         Bearage
-                    </Material.Typography>
-                </Material.Toolbar>
-            </Material.AppBar>
-            <Material.SwipeableDrawer
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <SwipeableDrawer
                 anchor="left"
                 open={state.isShowing}
                 onClose={toggleDrawer(false)}
                 onOpen={toggleDrawer(true)}
             >
                 {list()}
-            </Material.SwipeableDrawer>
+            </SwipeableDrawer>
         </header>
     );
 };
