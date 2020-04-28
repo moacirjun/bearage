@@ -2,6 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
+import { withStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge';
+import IconButton from '@material-ui/core/IconButton';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+
+const StyledBadge = withStyles((theme) => ({
+badge: {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+},
+}))(Badge);
 
 class Cart extends React.Component
 {
@@ -114,7 +127,11 @@ class Cart extends React.Component
                     <React.Fragment>
                         <Box display="flex" justifyContent="space-between">
                             <Box>
-                                <label>Produtos: {this.state.totalItemsCount}</label>
+                                <IconButton aria-label="cart">
+                                    <StyledBadge badgeContent={this.state.totalItemsCount} color="secondary" showZero>
+                                        <ShoppingCartIcon />
+                                    </StyledBadge>
+                                </IconButton>
                                 <label>Total: {this.props.total}</label>
                             </Box>
                             <Box>
