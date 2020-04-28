@@ -7,7 +7,6 @@ import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import Typography from '@material-ui/core/Typography';
 
 const StyledBadge = withStyles((theme) => ({
 badge: {
@@ -37,7 +36,9 @@ class Cart extends React.Component
             this.setState({showCart: false});
         }
 
-        const totalItems = this.props.items.reduce((previous, current) => previous + current.quantity, 0);
+        const totalItems = this.props.items.reduce((previous, current) => (
+            previous + (current.quantity ? parseInt(current.quantity, 10) : 0)
+        ), 0);
 
         if (this.state.totalItemsCount !== totalItems) {
             this.setState({totalItemsCount: totalItems});
