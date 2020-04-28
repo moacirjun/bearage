@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 
 class Cart extends React.Component
 {
@@ -108,16 +110,26 @@ class Cart extends React.Component
                         </ul>
                     </div>
                 }
-                <label>Produtos: {this.state.totalItemsCount}</label>
-                <label>Total: {this.props.total}</label>
-                <button onClick={this.saleButtonHandler}>Vender</button>
-                {
-                    this.state.totalItemsCount === 0 ||
-                    <label>
-                        <button onClick={this.showCartDetails}>Ver Carrinho</button>
-                        <button onClick={this.props.onClearCart}>Cancelar Venda</button>
-                    </label>
-                }
+                <Paper>
+                    <React.Fragment>
+                        <Box display="flex" justifyContent="space-between">
+                            <Box>
+                                <label>Produtos: {this.state.totalItemsCount}</label>
+                                <label>Total: {this.props.total}</label>
+                            </Box>
+                            <Box>
+                                <button onClick={this.saleButtonHandler}>Vender</button>
+                            </Box>
+                        </Box>
+                        {
+                            this.state.totalItemsCount === 0 ||
+                            <label>
+                                <button onClick={this.showCartDetails}>Ver Carrinho</button>
+                                <button onClick={this.props.onClearCart}>Cancelar Venda</button>
+                            </label>
+                        }
+                    </React.Fragment>
+                </Paper>
             </div>
         );
     }
