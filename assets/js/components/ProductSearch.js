@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-
+import { FormControl, InputLabel, Input, InputAdornment } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 class ProductSearch extends React.Component
 {
     constructor(props) {
@@ -53,12 +54,21 @@ class ProductSearch extends React.Component
 
     render() {
         return (
-            <input
-                type="text"
-                placeholder="Pesquise por nome, código..."
-                value={this.props.searchText}
-                onChange={this.onChangeHandle}
-            />
+            <FormControl>
+                <Input
+                    id="standard-adornment-search"
+                    type="text"
+                    placeholder="Pesquise por nome, cód..."
+                    size="small"
+                    value={this.props.searchText}
+                    onChange={this.onChangeHandle}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <SearchIcon />
+                        </InputAdornment>
+                    }
+                />
+            </FormControl>
         );
     }
 }

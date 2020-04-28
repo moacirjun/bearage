@@ -2,6 +2,7 @@ import React from 'react';
 import ProductSearch from './ProductSearch';
 import ProductList from './ProductList';
 import Cart from './Cart';
+import { Box } from '@material-ui/core';
 
 class Home extends React.Component
 {
@@ -192,15 +193,14 @@ class Home extends React.Component
                     onItemRemoved={this.removeOrderItem}
                     onClearCart={this.clearCart}
                 />
-                <h3>Pesquisar</h3>
-                <ProductSearch
-                    isFetching={this.setIsFetching}
-                    onSearchTextChange={this.onSearchTextChange}
-                    setItems={this.setItems}
-                    searchText={this.state.search}
-                />
-                <hr/>
-                <h3>Produtos</h3>
+                <Box my={1.5} display="flex" justifyContent="flex-end">
+                    <ProductSearch
+                        isFetching={this.setIsFetching}
+                        onSearchTextChange={this.onSearchTextChange}
+                        setItems={this.setItems}
+                        searchText={this.state.search}
+                    />
+                </Box>
                 <ProductList
                     isFetching={this.state.products.isFetching}
                     products={this.state.products.items}
