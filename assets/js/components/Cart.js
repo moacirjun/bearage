@@ -127,6 +127,7 @@ class Cart extends React.Component
                                 </li>
                             ))}
                         </ul>
+                        <button onClick={this.props.onClearCart}>Cancelar Venda</button>
                     </div>
                 }
                 <Paper>
@@ -152,12 +153,6 @@ class Cart extends React.Component
                                 </Button>
                             </Box>
                         </Box>
-                        {
-                            this.state.totalItemsCount === 0 ||
-                            <label>
-                                <button onClick={this.props.onClearCart}>Cancelar Venda</button>
-                            </label>
-                        }
                     </React.Fragment>
                 </Paper>
             </div>
