@@ -5,7 +5,6 @@ import Orders from './Orders';
 import Products from './Products';
 import AddProducts from './AddProduct';
 import Home from './Home';
-import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 
 const Main = () => (

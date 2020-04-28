@@ -192,7 +192,6 @@ class Home extends React.Component
                     onItemRemoved={this.removeOrderItem}
                     onClearCart={this.clearCart}
                 />
-                <hr/>
                 <h3>Pesquisar</h3>
                 <ProductSearch
                     isFetching={this.setIsFetching}
