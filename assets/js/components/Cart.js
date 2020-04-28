@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const StyledBadge = withStyles((theme) => ({
@@ -130,7 +131,7 @@ class Cart extends React.Component
                 <Paper>
                     <React.Fragment>
                         <Box display="flex" justifyContent="space-between">
-                            <Box>
+                            <Box display="flex" alignItems="center">
                                 <IconButton aria-label="cart" onClick={this.showCartDetails}>
                                     <StyledBadge badgeContent={this.state.totalItemsCount} color="secondary" showZero>
                                         <ShoppingCartIcon />
@@ -138,8 +139,14 @@ class Cart extends React.Component
                                 </IconButton>
                                 <label>Total: {this.props.total}</label>
                             </Box>
-                            <Box>
-                                <button onClick={this.saleButtonHandler}>Vender</button>
+                            <Box p={1.5}>
+                                <Button
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={this.saleButtonHandler}
+                                >
+                                    Cobrar
+                                </Button>
                             </Box>
                         </Box>
                         {
