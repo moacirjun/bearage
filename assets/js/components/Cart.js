@@ -90,29 +90,27 @@ class Cart extends React.Component
     render() {
         return (
             <Paper>
-                <React.Fragment>
-                    <Box display="flex" justifyContent="space-between">
-                        <Box display="flex" alignItems="center">
-                            <IconButton aria-label="cart" onClick={this.showCartDetails}>
-                                <StyledBadge badgeContent={this.state.totalItemsCount} color="secondary" showZero>
-                                    <ShoppingCartIcon />
-                                </StyledBadge>
-                            </IconButton>
-                            <Box ml={1} fontWeight="fontWeightBold">
-                                {this.state.totalItemsCount === 0 ? 'Sem Produtos' : 'R$' + this.props.total}
-                            </Box>
-                        </Box>
-                        <Box p={1.5}>
-                            <Button
-                                color="secondary"
-                                variant="contained"
-                                onClick={this.saleButtonHandler}
-                            >
-                                Cobrar
-                            </Button>
+                <Box display="flex" justifyContent="space-between">
+                    <Box display="flex" alignItems="center">
+                        <IconButton aria-label="cart" onClick={this.showCartDetails}>
+                            <StyledBadge badgeContent={this.state.totalItemsCount} color="secondary" showZero>
+                                <ShoppingCartIcon />
+                            </StyledBadge>
+                        </IconButton>
+                        <Box ml={1} fontWeight="fontWeightBold">
+                            {this.state.totalItemsCount === 0 ? 'Sem Produtos' : 'R$' + this.props.total}
                         </Box>
                     </Box>
-                </React.Fragment>
+                    <Box p={1.5}>
+                        <Button
+                            color="secondary"
+                            variant="contained"
+                            onClick={this.saleButtonHandler}
+                        >
+                            Cobrar
+                        </Button>
+                    </Box>
+                </Box>
 
                 {this.state.showCart &&
                     <div>
