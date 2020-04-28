@@ -77,6 +77,10 @@ class Cart extends React.Component
     }
 
     showCartDetails() {
+        if (this.state.totalItemsCount === 0) {
+            return;
+        }
+
         this.setState({showCart: !this.state.showCart});
     }
 
@@ -127,7 +131,7 @@ class Cart extends React.Component
                     <React.Fragment>
                         <Box display="flex" justifyContent="space-between">
                             <Box>
-                                <IconButton aria-label="cart">
+                                <IconButton aria-label="cart" onClick={this.showCartDetails}>
                                     <StyledBadge badgeContent={this.state.totalItemsCount} color="secondary" showZero>
                                         <ShoppingCartIcon />
                                     </StyledBadge>
@@ -141,7 +145,6 @@ class Cart extends React.Component
                         {
                             this.state.totalItemsCount === 0 ||
                             <label>
-                                <button onClick={this.showCartDetails}>Ver Carrinho</button>
                                 <button onClick={this.props.onClearCart}>Cancelar Venda</button>
                             </label>
                         }
