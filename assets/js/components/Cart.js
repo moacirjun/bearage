@@ -7,6 +7,7 @@ import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Typography from '@material-ui/core/Typography';
 
 const StyledBadge = withStyles((theme) => ({
 badge: {
@@ -137,7 +138,9 @@ class Cart extends React.Component
                                         <ShoppingCartIcon />
                                     </StyledBadge>
                                 </IconButton>
-                                <label>Total: {this.props.total}</label>
+                                <Box ml={1} fontWeight="fontWeightBold">
+                                    {this.state.totalItemsCount === 0 ? 'Sem Produtos' : 'R$' + this.props.total}
+                                </Box>
                             </Box>
                             <Box p={1.5}>
                                 <Button
