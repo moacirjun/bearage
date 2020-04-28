@@ -180,8 +180,6 @@ class Home extends React.Component
     render() {
         return (
             <React.Fragment>
-                <h2>Home</h2>
-                <h3>Detalhes da venda</h3>
                 <Cart
                     items={this.state.order.items}
                     discount={this.state.order.discount}
