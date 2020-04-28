@@ -89,7 +89,31 @@ class Cart extends React.Component
 
     render() {
         return (
-            <div>
+            <Paper>
+                <React.Fragment>
+                    <Box display="flex" justifyContent="space-between">
+                        <Box display="flex" alignItems="center">
+                            <IconButton aria-label="cart" onClick={this.showCartDetails}>
+                                <StyledBadge badgeContent={this.state.totalItemsCount} color="secondary" showZero>
+                                    <ShoppingCartIcon />
+                                </StyledBadge>
+                            </IconButton>
+                            <Box ml={1} fontWeight="fontWeightBold">
+                                {this.state.totalItemsCount === 0 ? 'Sem Produtos' : 'R$' + this.props.total}
+                            </Box>
+                        </Box>
+                        <Box p={1.5}>
+                            <Button
+                                color="secondary"
+                                variant="contained"
+                                onClick={this.saleButtonHandler}
+                            >
+                                Cobrar
+                            </Button>
+                        </Box>
+                    </Box>
+                </React.Fragment>
+
                 {this.state.showCart &&
                     <div>
                         <label>Desconto: </label>
@@ -106,7 +130,7 @@ class Cart extends React.Component
                             value={this.props.tax}
                             onChange={(event) => this.props.onCartDetailsChange(event.target.name, event.target.value)}
                         /><br/>
-                        <label>Observaçãpreviouso: </label>
+                        <label>Observação: </label>
                         <input
                             name="notes"
                             type="text"
@@ -131,32 +155,7 @@ class Cart extends React.Component
                         <button onClick={this.props.onClearCart}>Cancelar Venda</button>
                     </div>
                 }
-                <Paper>
-                    <React.Fragment>
-                        <Box display="flex" justifyContent="space-between">
-                            <Box display="flex" alignItems="center">
-                                <IconButton aria-label="cart" onClick={this.showCartDetails}>
-                                    <StyledBadge badgeContent={this.state.totalItemsCount} color="secondary" showZero>
-                                        <ShoppingCartIcon />
-                                    </StyledBadge>
-                                </IconButton>
-                                <Box ml={1} fontWeight="fontWeightBold">
-                                    {this.state.totalItemsCount === 0 ? 'Sem Produtos' : 'R$' + this.props.total}
-                                </Box>
-                            </Box>
-                            <Box p={1.5}>
-                                <Button
-                                    color="secondary"
-                                    variant="contained"
-                                    onClick={this.saleButtonHandler}
-                                >
-                                    Cobrar
-                                </Button>
-                            </Box>
-                        </Box>
-                    </React.Fragment>
-                </Paper>
-            </div>
+            </Paper>
         );
     }
 }
