@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  database:
+    build:
+      context: ./Docker/Mariadb
+    environment:
+      - MYSQL_DATABASE=bearage
+      - MYSQL_USER=beareage_user
+      - MYSQL_PASSWORD=beareage_pass
+      - MYSQL_ROOT_PASSWORD=bearage_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./Docker/data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./Docker/data/mysql:/var/lib/mysql
+
+  php-fpm:
+    build:
+      context: ./Docker/Php-fpm
+    depends_on:
+      - database
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+    volumes:
+      - .:/var/www/html/app
+    ports:
+      - 9000:9000
+
+  nginx:
+    build:
+      context: ./Docker/Nginx
+    volumes:
+      - .:/var/www/html/app
+      - ./Docker/config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./Docker/config/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+    ports:
+      - "8080:80"
